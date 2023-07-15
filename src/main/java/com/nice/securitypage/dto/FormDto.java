@@ -1,10 +1,7 @@
 package com.nice.securitypage.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +10,10 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class FormDto {
 
-
-    private Long id;
     // 이름
     @NotBlank(message = "이름을 입력하세요.")
     private String name;
