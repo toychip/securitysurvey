@@ -13,18 +13,19 @@ public class FormService {
     private final FormRepository formRepository;
 
     public void write(FormDto formDto) {
+
+        String phoneNumber = formDto.getPhoneNumber1() + formDto.getPhoneNumber2() + formDto.getPhoneNumber3();
+        String extensionNumber = formDto.getExtensionNumber1() + formDto.getExtensionNumber2() + formDto.getExtensionNumber3();
+
         Form form = Form.builder()
                 .name(formDto.getName())
                 .emailname(formDto.getEmailname())
-                .phoneNumber(formDto.getPhoneNumber())
-                .extensionNumber(formDto.getExtensionNumber())
+                .phoneNumber(phoneNumber)
+                .extensionNumber(extensionNumber)
                 .ip(formDto.getIp())
                 .browser(formDto.getBrowser())
                 .build();
 
         formRepository.save(form);
     }
-
-
-
 }
