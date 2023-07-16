@@ -19,7 +19,8 @@
 <div class="container">
 
     <div class="py-5 text-center">
-        <h2>사용자 등록 폼</h2>
+        <h2>정보보호 및 보안점검 표</h2>
+        <p th:text="'점검기간: ' + ${fromYear} + '.' + ${fromMonth} + '.' + ${fromDay} + ' ~ ' + ${toYear} + '.' + ${toMonth} + '.' + ${toDay}"></p>
     </div>
 
     <form th:action th:object="${formdto}" method="post">
@@ -33,61 +34,58 @@
             </div>
         </div>
 
-        <div>
+        <div class="flex-row">
             <div>
                 <label for="emailname" th:text="#{label.formdto.emailname}">이메일</label>
                 <input type="text" id="emailname" th:field="*{emailname}"
                        th:errorclass="field-error" class="form-control" placeholder="이메일을 입력하세요">
                 <div class="field-error" th:errors="*{emailname}"></div>
-            </div><span>@nicednr.co.kr</span>
+            </div>
+            <span>@nicednr.co.kr</span>
         </div>
-        <div>
-            <div>
-                <label for="phoneNumber1" th:text="#{label.formdto.phoneNumber1}">전화번호 앞자리</label>
+
+        <div class="row">
+            <div class="col">
+                <label for="phoneNumber1" th:text="#{label.formdto.phoneNumber}">휴대전화</label>
+            </div>
+            <div class="col">
                 <input type="text" id="phoneNumber1" th:field="*{phoneNumber1}"
-                       th:errorclass="field-error" class="form-control" placeholder="전화번호 앞자리를 입력하세요">
+                       th:errorclass="field-error" class="form-control" placeholder="010">
                 <div class="field-error" th:errors="*{phoneNumber1}"></div>
             </div>
-
-
-            <div>
-                <label for="phoneNumber2" th:text="#{label.formdto.phoneNumber2}">전화번호 중간자리</label>
+            <div class="col">
                 <input type="text" id="phoneNumber2" th:field="*{phoneNumber2}"
-                       th:errorclass="field-error" class="form-control" placeholder="전화번호 중간 자리를 입력하세요">
+                       th:errorclass="field-error" class="form-control" placeholder="1234">
                 <div class="field-error" th:errors="*{phoneNumber2}"></div>
             </div>
-
-            <div>
-                <label for="phoneNumber3" th:text="#{label.formdto.phoneNumber3}">전화번호 뒷자리</label>
+            <div class="col">
                 <input type="text" id="phoneNumber3" th:field="*{phoneNumber3}"
-                       th:errorclass="field-error" class="form-control" placeholder="전화번호 뒷자리를 입력하세요">
+                       th:errorclass="field-error" class="form-control" placeholder="5678">
                 <div class="field-error" th:errors="*{phoneNumber3}"></div>
             </div>
-
         </div>
-        <div>
-            <div>
-                <label for="extensionNumber1" th:text="#{label.formdto.extensionNumber1}">내선번호 앞자리</label>
+
+        <div class="row">
+            <div class="col">
+                <label for="extensionNumber1" th:text="#{label.formdto.extensionNumber}">내선번호</label>
+            </div>
+            <div class="col">
                 <input type="text" id="extensionNumber1" th:field="*{extensionNumber1}"
-                       th:errorclass="field-error" class="form-control" placeholder="내선번호 앞자리를 입력하세요">
+                       th:errorclass="field-error" class="form-control" placeholder="02">
                 <div class="field-error" th:errors="*{extensionNumber1}"></div>
             </div>
-
-            <div>
-                <label for="extensionNumber2" th:text="#{label.formdto.extensionNumber2}">내선번호 중간자리</label>
+            <div class="col">
                 <input type="text" id="extensionNumber2" th:field="*{extensionNumber2}"
-                       th:errorclass="field-error" class="form-control" placeholder="내선번호 중간 자리를 입력하세요">
+                       th:errorclass="field-error" class="form-control" placeholder="123">
                 <div class="field-error" th:errors="*{extensionNumber2}"></div>
             </div>
-
-            <div>
-                <label for="extensionNumber3" th:text="#{label.formdto.extensionNumber3}">내선번호 뒷자리</label>
+            <div class="col">
                 <input type="text" id="extensionNumber3" th:field="*{extensionNumber3}"
-                       th:errorclass="field-error" class="form-control" placeholder="내선번호 뒷자리를 입력하세요">
+                       th:errorclass="field-error" class="form-control" placeholder="4567">
                 <div class="field-error" th:errors="*{extensionNumber3}"></div>
             </div>
-
         </div>
+
 
         <p>IP 주소: <span th:text="${formdto.ip}"></span></p>
         <p>브라우저 정보: <span th:text="${formdto.browser}"></span></p>
