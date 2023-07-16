@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import static com.nice.securitypage.DateConfig.TO_DATE;
-
 @Service
 @RequiredArgsConstructor
 public class FormService {
