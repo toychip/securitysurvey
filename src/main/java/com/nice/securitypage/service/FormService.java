@@ -12,7 +12,7 @@ public class FormService {
 
     private final FormRepository formRepository;
 
-    public void write(FormDto formDto) {
+    public void write(FormDto formDto, String clientIP, String clientBrowser) {
 
         String phoneNumber = formDto.getPhoneNumber1() + formDto.getPhoneNumber2() + formDto.getPhoneNumber3();
         String extensionNumber = formDto.getExtensionNumber1() + formDto.getExtensionNumber2() + formDto.getExtensionNumber3();
@@ -22,8 +22,8 @@ public class FormService {
                 .emailname(formDto.getEmailname())
                 .phoneNumber(phoneNumber)
                 .extensionNumber(extensionNumber)
-                .ip(formDto.getIp())
-                .browser(formDto.getBrowser())
+                .ip(clientIP)
+                .browser(clientBrowser)
                 .build();
 
         formRepository.save(form);

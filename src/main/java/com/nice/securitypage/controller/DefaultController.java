@@ -6,6 +6,7 @@ import com.nice.securitypage.repository.DepartmentRepository;
 import com.nice.securitypage.repository.FormRepository;
 import com.nice.securitypage.service.FormService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -45,8 +46,8 @@ public class DefaultController {
 
 
     @PostMapping("/main")
-    public String addItem(@Validated @ModelAttribute FormDto formDto, BindingResult bindingResult,
-                          HttpServletRequest request, Model model) {
+    public String addItem(@Valid @ModelAttribute FormDto formDto, BindingResult bindingResult,
+                          HttpServletRequest request) {
 
         String clientIP = request.getRemoteAddr(); // ip 정보 가져오기
         String clientBrowser = request.getHeader(HttpHeaders.USER_AGENT);   // 브라우저 정보 가져오기
@@ -56,14 +57,10 @@ public class DefaultController {
             formDto = getFormDto(clientIP, clientBrowser); // ip와 broswer 정보를 넣은 빈 껍데기 만들기
 //            redirectAttributes.addFlashAttribute("formdto", formDto);
 //            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.formdto", bindingResult);
-//            model.addAttribute("ip", clientIP);
-//            model.addAttribute("browser", clientBrowser);
-            model.addAttribute("formdto", formDto); // view 렌더링
-
             return "form/addForm";
         }
 
-        formService.write(formDto);
+        formService.write(formDto, clientIP, clientBrowser);
         return "endPage";
     }
 }
