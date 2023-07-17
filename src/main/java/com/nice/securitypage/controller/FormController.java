@@ -26,8 +26,6 @@ import java.time.format.DateTimeFormatter;
 public class FormController {
     private final FormService formService;
 
-
-
     @GetMapping("/main")
     public String main(Model model, HttpServletRequest request) {
         // 점검 시작일

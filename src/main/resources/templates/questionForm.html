@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Checklist</title>
+    <style>
+        .required {
+            color: red;
+        }
+        .optional {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<form action="#" th:action="@{/answer}" method="post" th:object="${answer}">
+    <table>
+        <tr>
+            <th colspan="4">체크리스트</th>
+        </tr>
+        <tr th:each="question, stat : ${question}">
+            <td th:text="${stat.count}"></td>
+            <td th:text="${question.content}">
+                <!-- Question content will be inserted here -->
+            </td>
+            <td th:class="${question.isRequired ? 'required' : 'optional'}"
+                th:text="${question.isRequired ? '필수' : '선택'}">
+                <!-- '필수' or '선택' will be inserted here depending on the value of isRequired -->
+            </td>
+            <td>
+                <!-- radio type -->
+                <div th:if="${question.type.name() == 'RADIO'}">
+                    <input type="radio" th:field="*{response}" th:value="'예'"> 예
+                    <input type="radio" th:field="*{response}" th:value="'아니오'"> 아니오
+                </div>
+
+                <!-- checkbox type -->
+                <div th:if="${question.type.name() == 'CHECKBOX'}">
+                    <input type="checkbox" th:field="*{response}" th:value="'예'"> 예
+                    <input type="checkbox" th:field="*{response}" th:value="'아니오'"> 아니오
+                </div>
+
+                <!-- select type -->
+                <div th:if="${question.type.name() == 'SELECT'}">
+                    <select th:field="*{response}">
+                        <option th:value="'예'">예</option>
+                        <option th:value="'아니오'">아니오</option>
+                    </select>
+                </div>
+
+                <!-- input type -->
+                <div th:if="${question.type.name() == 'INPUT'}">
+                    <input type="text" th:field="*{response}" placeholder="답변을 입력해주세요">
+                </div>
+            </td>
+        </tr>
+    </table>
+    <input type="submit" value="제출">
+</form>
+</body>
+</html>

@@ -1,9 +1,6 @@
 package com.nice.securitypage.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,9 +15,12 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
     private String content;
 
-    private Boolean require;
+    private Boolean isRequired;
+
+    @Enumerated(EnumType.STRING)
+    private ResponseType type;
 }
