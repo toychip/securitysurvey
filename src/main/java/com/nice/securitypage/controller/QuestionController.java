@@ -4,15 +4,16 @@ import com.nice.securitypage.entity.Answer;
 import com.nice.securitypage.entity.Question;
 import com.nice.securitypage.service.AnswerService;
 import com.nice.securitypage.service.QuestionService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,8 +31,26 @@ public class QuestionController {
     }
 
     @PostMapping("/question")
-    public String endQuestions(@ModelAttribute Answer answer){
-        answerService.save(answer);
-        return "redirect:/end";
+    public String submitAnswers(HttpServletRequest request){
+
+        List<Long> questionIds = new ArrayList<>();
+        Map<String, String> responseMap = new HashMap<>();
+        for (String paramName : request.getParameterMap().keySet()) {
+            if (paramName.startsWith("questionId")) {
+                questionIds.add(Long.valueOf(request.getParameter(paramName)));
+            }
+            if (paramName.startsWith("response")) {
+                responseMap.put(paramName, request.getParameter(paramName));
+            }
+        }
+
+        answerService.submitForm(questionIds, responseMap);
+        return "redirect:/endPage";
     }
+
+    @GetMapping("/endPage")
+    public String endPage() {
+        return "endPage";
+    }
+
 }

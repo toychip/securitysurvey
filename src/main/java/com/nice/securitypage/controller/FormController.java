@@ -65,7 +65,7 @@ public class FormController {
         }
 
         formService.write(formDto, clientIP, clientBrowser);
-        return "redirect:/questions";
+        return "redirect:/question";
     }
 
     public void getPeriod(Model model) {

@@ -12,7 +12,7 @@
     </style>
 </head>
 <body>
-<form action="#" th:action="@{/answer}" method="post" th:object="${answer}">
+<form action="#" th:action="@{/question}" method="post" th:object="${answer}">
     <table>
         <tr>
             <th colspan="4">체크리스트</th>
@@ -29,19 +29,22 @@
             <td>
                 <!-- radio type -->
                 <div th:if="${question.type.name() == 'RADIO'}">
-                    <input type="radio" th:field="*{response}" th:value="'예'"> 예
-                    <input type="radio" th:field="*{response}" th:value="'아니오'"> 아니오
+                    <input type="hidden" th:name="'questionId' + ${stat.index}" th:value="${question.id}">
+                    <input type="radio" th:name="'response' + ${stat.index}" th:value="'예'"> 예
+                    <input type="radio" th:name="'response' + ${stat.index}" th:value="'아니오'"> 아니오
                 </div>
 
                 <!-- checkbox type -->
                 <div th:if="${question.type.name() == 'CHECKBOX'}">
-                    <input type="checkbox" th:field="*{response}" th:value="'예'"> 예
-                    <input type="checkbox" th:field="*{response}" th:value="'아니오'"> 아니오
+                    <input type="hidden" th:name="'questionId' + ${stat.index}" th:value="${question.id}">
+                    <input type="checkbox" th:name="'response' + ${stat.index}" th:value="'예'"> 예
+                    <input type="checkbox" th:name="'response' + ${stat.index}" th:value="'아니오'"> 아니오
                 </div>
 
                 <!-- select type -->
                 <div th:if="${question.type.name() == 'SELECT'}">
-                    <select th:field="*{response}">
+                    <input type="hidden" th:name="'questionId' + ${stat.index}" th:value="${question.id}">
+                    <select th:name="'response' + ${stat.index}">
                         <option th:value="'예'">예</option>
                         <option th:value="'아니오'">아니오</option>
                     </select>
@@ -49,8 +52,10 @@
 
                 <!-- input type -->
                 <div th:if="${question.type.name() == 'INPUT'}">
-                    <input type="text" th:field="*{response}" placeholder="답변을 입력해주세요">
+                    <input type="hidden" th:name="'questionId' + ${stat.index}" th:value="${question.id}">
+                    <input type="text" th:name="'response' + ${stat.index}" placeholder="답변을 입력해주세요">
                 </div>
+
             </td>
         </tr>
     </table>
