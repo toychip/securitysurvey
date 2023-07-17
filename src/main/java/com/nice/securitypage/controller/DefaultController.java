@@ -32,8 +32,9 @@ public class DefaultController {
     public String main(Model model, HttpServletRequest request) {
         // 점검 시작일
         getPeriod(model);
-        String outOfDate = formService.isOutOfDate();
 
+        // 점검 날짜 검증
+        String outOfDate = formService.isOutOfDate();
         if (outOfDate != null) {
             return outOfDate;
         }
@@ -66,8 +67,14 @@ public class DefaultController {
         }
 
         formService.write(formDto, clientIP, clientBrowser);
-        return "endPage";
+        return "redirect:/questions";
     }
+
+    @GetMapping("questions")
+    public String questions() {
+        return "questions";
+    }
+
 
     public void getPeriod(Model model) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
