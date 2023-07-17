@@ -23,7 +23,7 @@ import java.time.format.DateTimeFormatter;
 @Controller
 @RequestMapping("/")
 @RequiredArgsConstructor
-public class DefaultController {
+public class FormController {
     private final FormService formService;
 
 
@@ -69,12 +69,6 @@ public class DefaultController {
         formService.write(formDto, clientIP, clientBrowser);
         return "redirect:/questions";
     }
-
-    @GetMapping("questions")
-    public String questions() {
-        return "questions";
-    }
-
 
     public void getPeriod(Model model) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
