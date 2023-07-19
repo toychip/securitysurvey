@@ -5,6 +5,7 @@ import com.nice.securitypage.entity.Question;
 import com.nice.securitypage.service.AnswerService;
 import com.nice.securitypage.service.QuestionService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +32,7 @@ public class QuestionController {
     }
 
     @PostMapping("/question")
-    public String submitAnswers(HttpServletRequest request){
+    public String submitAnswers(HttpServletRequest request, HttpSession session){
 
         List<Long> questionIds = new ArrayList<>();
         Map<String, String> responseMap = new HashMap<>();
@@ -44,7 +45,9 @@ public class QuestionController {
             }
         }
 
-        answerService.submitForm(questionIds, responseMap);
+        String emailname = (String) session.getAttribute("emailname");
+        answerService.submitForm(questionIds, responseMap, emailname);
+
         return "redirect:/endPage";
     }
 

@@ -4,6 +4,7 @@ import com.nice.securitypage.DateConfig;
 import com.nice.securitypage.dto.FormDto;
 import com.nice.securitypage.service.FormService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +49,7 @@ public class FormController {
 
     @PostMapping("/main")
     public String addItem(@Valid @ModelAttribute FormDto formDto, BindingResult bindingResult,
-                          HttpServletRequest request, Model model) {
+                          HttpServletRequest request, Model model, HttpSession session) {
 
         String clientIP = request.getRemoteAddr(); // ip 정보 가져오기
         String clientBrowser = request.getHeader(HttpHeaders.USER_AGENT);   // 브라우저 정보 가져오기
@@ -61,6 +62,9 @@ public class FormController {
             model.addAttribute("errors", bindingResult.getAllErrors());
             formDto = formService.getFormDto(clientIP, clientBrowser); // ip와 broswer 정보를 넣은 빈 껍데기 만들기
             model.addAttribute("formdto", formDto);
+
+            session.setAttribute("emailname", formDto.getEmailname());
+
             return "form/addForm";
         }
 

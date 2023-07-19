@@ -17,7 +17,8 @@ public class AnswerService {
     private final QuestionService questionService;
 
     public void submitForm(List<Long> questionIds,
-                           Map<String, String> responseMap
+                           Map<String, String> responseMap,
+                           String emailname
                            ) {
         for (Long questionId : questionIds) {
             String response = responseMap.get("response" + questionId);
@@ -26,10 +27,10 @@ public class AnswerService {
             Question question = questionService.findById(questionId);
 
             Answer builderAnswer = Answer.builder()
-                    .id(questionId)
                     .content(question.getContent())
                     .isRequired(question.getIsRequired())
                     .response(response)
+                    .emailname(emailname)
                     .build();
 
             answerRepository.save(builderAnswer);
