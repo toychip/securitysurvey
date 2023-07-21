@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @ToString
-@Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,7 +36,7 @@ public class FormDto {
     private String browser;
 
     public String getEmailname() {
-        return this.emailname + "@nicednr.co.kr";
+        return this.emailname != null ? this.emailname + "@nicednr.co.kr" : "";
     }
 
 }

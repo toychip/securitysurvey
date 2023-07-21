@@ -18,13 +18,15 @@ public class AnswerService {
 
     public void submitForm(List<Long> questionIds,
                            Map<String, String> responseMap,
-                           String emailname
-                           ) {
-        for (Long questionId : questionIds) {
-            String response = responseMap.get("response" + questionId);
-
-            // Find the question from the database
+                           String emailname) {
+        for (int i = 0; i < questionIds.size(); i++) {
+            Long questionId = questionIds.get(i);
+            String response = responseMap.get("response" + i);
             Question question = questionService.findById(questionId);
+
+//            if (response == null) {
+//                System.out.println("Response for questionId " + questionId + " is null");
+//            }
 
             Answer builderAnswer = Answer.builder()
                     .content(question.getContent())
@@ -32,6 +34,7 @@ public class AnswerService {
                     .response(response)
                     .emailname(emailname)
                     .build();
+
 
             answerRepository.save(builderAnswer);
         }
