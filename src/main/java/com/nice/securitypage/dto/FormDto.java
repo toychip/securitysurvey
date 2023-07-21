@@ -35,4 +35,9 @@ public class FormDto {
     private String ip;
     // 브라우저 정보
     private String browser;
+
+    public String getEmailname() {
+        return this.emailname + "@nicednr.co.kr";
+    }
+
 }

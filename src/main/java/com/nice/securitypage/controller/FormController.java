@@ -50,25 +50,23 @@ public class FormController {
     @PostMapping("/main")
     public String addItem(@Valid @ModelAttribute FormDto formDto, BindingResult bindingResult,
                           HttpServletRequest request, Model model, HttpSession session) {
-
         String clientIP = request.getRemoteAddr(); // ip 정보 가져오기
         String clientBrowser = request.getHeader(HttpHeaders.USER_AGENT);   // 브라우저 정보 가져오기
-
         if (bindingResult.hasErrors()) {
             log.info("errors={} ", bindingResult);
             // 점검 시작일
             getPeriod(model);
-
             model.addAttribute("errors", bindingResult.getAllErrors());
             formDto = formService.getFormDto(clientIP, clientBrowser); // ip와 broswer 정보를 넣은 빈 껍데기 만들기
-            model.addAttribute("formdto", formDto);
-
-            session.setAttribute("emailname", formDto.getEmailname());
-
             return "form/addForm";
         }
 
         formService.write(formDto, clientIP, clientBrowser);
+        session.setAttribute("emailname", formDto.getEmailname());
+
+//        String emailname = (String) session.getAttribute("emailname");
+//        log.info("Session emailname: " + emailname);
+
         return "redirect:/question";
     }
 
