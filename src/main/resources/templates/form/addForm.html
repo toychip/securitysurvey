@@ -27,8 +27,9 @@
 
         <div>
             <label for="name" th:text="#{label.formdto.name}">이름</label>
-            <input type="text" id="name" th:field="*{name}" th:errorclass="field-error" class="form-control" placeholder="이름을 입력하세요">
-            <p th:if = "${#fields.hasErrors('name')}" th:errors="*{name}" class="field-error"></p>
+            <input type="text" id="name" th:field="*{name}"
+                   th:errorclass="field-error" class="form-control" placeholder="이름을 입력하세요">
+            <p th:if="${name != null}" th:text="${name}" class="field-error"></p>
         </div>
 
         <div class="flex-row">
@@ -36,7 +37,7 @@
                 <label for="emailname" th:text="#{label.formdto.emailname}">이메일</label>
                 <input type="text" id="emailname" th:field="*{emailname}"
                        th:errorclass="field-error" class="form-control" placeholder="이메일을 입력하세요">
-                <p th:if = "${#fields.hasErrors('emailname')}" th:errors="*{emailname}" class="field-error"></p>
+                <p th:if="${emailname != null}" th:text="${emailname}" class="field-error"></p>
             </div>
             <span>@nicednr.co.kr</span>
         </div>
@@ -48,17 +49,17 @@
             <div class="col">
                 <input type="text" id="phoneNumber1" th:field="*{phoneNumber1}"
                        th:errorclass="field-error" class="form-control" placeholder="010">
-                <p th:if = "${#fields.hasErrors('phoneNumber1')}" th:errors="*{phoneNumber1}" class="field-error"></p>
+                <p th:if="${phoneNumber1 != null}" th:text="${phoneNumber1}" class="field-error"></p>
             </div>
             <div class="col">
                 <input type="text" id="phoneNumber2" th:field="*{phoneNumber2}"
                        th:errorclass="field-error" class="form-control" placeholder="1234">
-                <p th:if = "${#fields.hasErrors('phoneNumber2')}" th:errors="*{phoneNumber2}" class="field-error"></p>
+                <p th:if="${phoneNumber2 != null}" th:text="${phoneNumber2}" class="field-error"></p>
             </div>
             <div class="col">
                 <input type="text" id="phoneNumber3" th:field="*{phoneNumber3}"
                        th:errorclass="field-error" class="form-control" placeholder="5678">
-                <p th:if = "${#fields.hasErrors('phoneNumber3')}" th:errors="*{phoneNumber3}" class="field-error"></p>
+                <p th:if="${phoneNumber3 != null}" th:text="${phoneNumber3}" class="field-error"></p>
             </div>
         </div>
 
@@ -69,24 +70,22 @@
             <div class="col">
                 <input type="text" id="extensionNumber1" th:field="*{extensionNumber1}"
                        th:errorclass="field-error" class="form-control" placeholder="02">
-                <p th:if = "${#fields.hasErrors('extensionNumber1')}" th:errors="*{extensionNumber1}" class="field-error"></p>
+                <p th:if="${extensionNumber1 != null}" th:text="${extensionNumber1}" class="field-error"></p>
             </div>
             <div class="col">
                 <input type="text" id="extensionNumber2" th:field="*{extensionNumber2}"
                        th:errorclass="field-error" class="form-control" placeholder="123">
-                <p th:if = "${#fields.hasErrors('extensionNumber2')}" th:errors="*{extensionNumber2}" class="field-error"></p>
+                <p th:if="${extensionNumber2 != null}" th:text="${extensionNumber2}" class="field-error"></p>
             </div>
             <div class="col">
                 <input type="text" id="extensionNumber3" th:field="*{extensionNumber3}"
                        th:errorclass="field-error" class="form-control" placeholder="4567">
-                <p th:if = "${#fields.hasErrors('extensionNumber3')}" th:errors="*{extensionNumber3}" class="field-error"></p>
+                <p th:if="${extensionNumber3 != null}" th:text="${extensionNumber3}" class="field-error"></p>
             </div>
         </div>
 
         <p>IP 주소: <span th:text="${formdto.ip}"></span></p>
         <p>브라우저 정보: <span th:text="${formdto.browser}"></span></p>
-
-        <hr class="my-4">
 
         <div class="row">
             <div class="col">

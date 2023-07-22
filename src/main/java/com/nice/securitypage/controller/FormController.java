@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -53,14 +55,23 @@ public class FormController {
         String clientIP = request.getRemoteAddr(); // ip 정보 가져오기
         String clientBrowser = request.getHeader(HttpHeaders.USER_AGENT);   // 브라우저 정보 가져오기
         if (bindingResult.hasErrors()) {
-            getPeriod(model);
-            log.info("errors={} ", bindingResult);
             // 점검 시작일
-            model.addAttribute("errors", bindingResult.getAllErrors());
+            getPeriod(model);
+
+//            log.info("errors={} ", bindingResult);
+//            model.addAttribute("errors", bindingResult);
+////            model.addAttribute("org.springframework.validation.BindingResult.formdto", bindingResult);
+
+            List<FieldError> errors = bindingResult.getFieldErrors();
+            for (FieldError error : errors) {
+                model.addAttribute(error.getField(), error.getDefaultMessage());
+            }
 
 
-            formDto = formService.updatedFormDto(formDto, clientIP, clientBrowser);// ip와 broswer 정보를 넣은 빈 껍데기 만들기
-            model.addAttribute("formdto", formDto); // <<< 이 부분을 추가
+
+            // ip와 broswer 정보를 넣은 빈 껍데기 만들기
+            formDto = formService.updatedFormDto(formDto, clientIP, clientBrowser);
+            model.addAttribute("formdto", formDto);
             return "form/addForm";
         }
         // 날짜 검증
