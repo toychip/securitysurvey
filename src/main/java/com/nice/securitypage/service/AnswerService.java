@@ -39,4 +39,8 @@ public class AnswerService {
             answerRepository.save(builderAnswer);
         }
     }
+
+    public boolean isAlready(String emailname) {
+        return answerRepository.existsByEmailname(emailname);
+    }
 }

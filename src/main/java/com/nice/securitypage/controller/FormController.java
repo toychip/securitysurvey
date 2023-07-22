@@ -2,6 +2,7 @@ package com.nice.securitypage.controller;
 
 import com.nice.securitypage.DateConfig;
 import com.nice.securitypage.dto.FormDto;
+import com.nice.securitypage.service.AnswerService;
 import com.nice.securitypage.service.FormService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -29,6 +30,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FormController {
     private final FormService formService;
+    private final AnswerService answerService;
 
     @GetMapping("/main")
     public String main(Model model, HttpServletRequest request) {
@@ -54,33 +56,30 @@ public class FormController {
                           HttpServletRequest request, Model model, HttpSession session) {
         String clientIP = request.getRemoteAddr(); // ip 정보 가져오기
         String clientBrowser = request.getHeader(HttpHeaders.USER_AGENT);   // 브라우저 정보 가져오기
-        if (bindingResult.hasErrors()) {
-            // 점검 시작일
-            getPeriod(model);
+        String emailname = formDto.getEmailname() + "@nicednr.co.kr";   // 입력한 유저의 이메일 정보 가져오기
 
-//            log.info("errors={} ", bindingResult);
-//            model.addAttribute("errors", bindingResult);
-////            model.addAttribute("org.springframework.validation.BindingResult.formdto", bindingResult);
+        if(answerService.isAlready(emailname)){ // 이미 설문을 했는지
+            return "redirect:/alreadyFin";
+        }
+
+        if (bindingResult.hasErrors()) {
+
+            // 점검 시작일           // 날짜 검증
+            getPeriod(model);
 
             List<FieldError> errors = bindingResult.getFieldErrors();
             for (FieldError error : errors) {
                 model.addAttribute(error.getField(), error.getDefaultMessage());
-            }
-
-
+            }   // 에러 해결 완
 
             // ip와 broswer 정보를 넣은 빈 껍데기 만들기
             formDto = formService.updatedFormDto(formDto, clientIP, clientBrowser);
             model.addAttribute("formdto", formDto);
             return "form/addForm";
         }
-        // 날짜 검증
 
         formService.write(formDto, clientIP, clientBrowser);
         session.setAttribute("emailname", formDto.getEmailname());
-
-//        String emailname = (String) session.getAttribute("emailname");
-//        log.info("Session emailname: " + emailname);
 
         return "redirect:/question";
     }
