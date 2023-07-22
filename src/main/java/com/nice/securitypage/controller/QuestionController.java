@@ -35,7 +35,7 @@ public class QuestionController {
     }
 
     @PostMapping("/question")
-    public String submitAnswers(HttpServletRequest request, HttpSession session){
+    public String submitAnswers(HttpServletRequest request, HttpSession session) {
 
         List<Long> questionIds = new ArrayList<>();
         Map<String, String> responseMap = new HashMap<>();
@@ -59,4 +59,8 @@ public class QuestionController {
         return "endPage";
     }
 
+    @GetMapping("/alreadyFin")
+    public String alreadyFinished() {
+        return "alreadyFin";
+    }
 }
