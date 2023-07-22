@@ -20,10 +20,10 @@ public class FormService {
 
         String phoneNumber = formDto.getPhoneNumber1() + formDto.getPhoneNumber2() + formDto.getPhoneNumber3();
         String extensionNumber = formDto.getExtensionNumber1() + formDto.getExtensionNumber2() + formDto.getExtensionNumber3();
-
+        String emailname = formDto.getEmailname() + "@nicednr.co.kr";
         Form form = Form.builder()
                 .name(formDto.getName())
-                .emailname(formDto.getEmailname())
+                .emailname(emailname)
                 .phoneNumber(phoneNumber)
                 .extensionNumber(extensionNumber)
                 .ip(clientIP)
@@ -36,6 +36,22 @@ public class FormService {
     // ip와 browser 정보를 넣은 빈 껍데기 만들기
     public FormDto getFormDto(String clientIP, String clientBrowser) {
         FormDto formDto = FormDto.builder()
+                .ip(clientIP)
+                .browser(clientBrowser)
+                .build();
+        return formDto;
+    }
+
+    public FormDto updatedFormDto(FormDto inputFormDto, String clientIP, String clientBrowser) {
+        FormDto formDto = FormDto.builder()
+                .name(inputFormDto.getName())
+                .emailname(inputFormDto.getEmailname())
+                .phoneNumber1(inputFormDto.getPhoneNumber1())
+                .phoneNumber2(inputFormDto.getPhoneNumber2())
+                .phoneNumber3(inputFormDto.getPhoneNumber3())
+                .extensionNumber1(inputFormDto.getExtensionNumber1())
+                .extensionNumber2(inputFormDto.getExtensionNumber2())
+                .extensionNumber3(inputFormDto.getExtensionNumber3())
                 .ip(clientIP)
                 .browser(clientBrowser)
                 .build();

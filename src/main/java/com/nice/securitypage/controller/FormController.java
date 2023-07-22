@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,19 +48,22 @@ public class FormController {
     }
 
     @PostMapping("/main")
-    public String addItem(@Valid @ModelAttribute FormDto formDto, BindingResult bindingResult,
+    public String addItem(@Validated @ModelAttribute FormDto formDto, BindingResult bindingResult,
                           HttpServletRequest request, Model model, HttpSession session) {
         String clientIP = request.getRemoteAddr(); // ip 정보 가져오기
         String clientBrowser = request.getHeader(HttpHeaders.USER_AGENT);   // 브라우저 정보 가져오기
         if (bindingResult.hasErrors()) {
+            getPeriod(model);
             log.info("errors={} ", bindingResult);
             // 점검 시작일
-            getPeriod(model);
             model.addAttribute("errors", bindingResult.getAllErrors());
-            formDto = formService.getFormDto(clientIP, clientBrowser); // ip와 broswer 정보를 넣은 빈 껍데기 만들기
+
+
+            formDto = formService.updatedFormDto(formDto, clientIP, clientBrowser);// ip와 broswer 정보를 넣은 빈 껍데기 만들기
             model.addAttribute("formdto", formDto); // <<< 이 부분을 추가
             return "form/addForm";
         }
+        // 날짜 검증
 
         formService.write(formDto, clientIP, clientBrowser);
         session.setAttribute("emailname", formDto.getEmailname());

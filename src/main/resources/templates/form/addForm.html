@@ -27,11 +27,8 @@
 
         <div>
             <label for="name" th:text="#{label.formdto.name}">이름</label>
-            <input type="text" id="name" th:field="*{name}"
-                   th:errorclass="field-error" class="form-control" placeholder="이름을 입력하세요">
-            <div class="field-error" th:errors="*{name}">
-                이름 오류
-            </div>
+            <input type="text" id="name" th:field="*{name}" th:errorclass="field-error" class="form-control" placeholder="이름을 입력하세요">
+            <p th:if = "${#fields.hasErrors('name')}" th:errors="*{name}" class="field-error"></p>
         </div>
 
         <div class="flex-row">
@@ -39,7 +36,7 @@
                 <label for="emailname" th:text="#{label.formdto.emailname}">이메일</label>
                 <input type="text" id="emailname" th:field="*{emailname}"
                        th:errorclass="field-error" class="form-control" placeholder="이메일을 입력하세요">
-                <div class="field-error" th:errors="*{emailname}"></div>
+                <p th:if = "${#fields.hasErrors('emailname')}" th:errors="*{emailname}" class="field-error"></p>
             </div>
             <span>@nicednr.co.kr</span>
         </div>
@@ -51,17 +48,17 @@
             <div class="col">
                 <input type="text" id="phoneNumber1" th:field="*{phoneNumber1}"
                        th:errorclass="field-error" class="form-control" placeholder="010">
-                <div class="field-error" th:errors="*{phoneNumber1}"></div>
+                <p th:if = "${#fields.hasErrors('phoneNumber1')}" th:errors="*{phoneNumber1}" class="field-error"></p>
             </div>
             <div class="col">
                 <input type="text" id="phoneNumber2" th:field="*{phoneNumber2}"
                        th:errorclass="field-error" class="form-control" placeholder="1234">
-                <div class="field-error" th:errors="*{phoneNumber2}"></div>
+                <p th:if = "${#fields.hasErrors('phoneNumber2')}" th:errors="*{phoneNumber2}" class="field-error"></p>
             </div>
             <div class="col">
                 <input type="text" id="phoneNumber3" th:field="*{phoneNumber3}"
                        th:errorclass="field-error" class="form-control" placeholder="5678">
-                <div class="field-error" th:errors="*{phoneNumber3}"></div>
+                <p th:if = "${#fields.hasErrors('phoneNumber3')}" th:errors="*{phoneNumber3}" class="field-error"></p>
             </div>
         </div>
 
@@ -72,17 +69,17 @@
             <div class="col">
                 <input type="text" id="extensionNumber1" th:field="*{extensionNumber1}"
                        th:errorclass="field-error" class="form-control" placeholder="02">
-                <div class="field-error" th:errors="*{extensionNumber1}"></div>
+                <p th:if = "${#fields.hasErrors('extensionNumber1')}" th:errors="*{extensionNumber1}" class="field-error"></p>
             </div>
             <div class="col">
                 <input type="text" id="extensionNumber2" th:field="*{extensionNumber2}"
                        th:errorclass="field-error" class="form-control" placeholder="123">
-                <div class="field-error" th:errors="*{extensionNumber2}"></div>
+                <p th:if = "${#fields.hasErrors('extensionNumber2')}" th:errors="*{extensionNumber2}" class="field-error"></p>
             </div>
             <div class="col">
                 <input type="text" id="extensionNumber3" th:field="*{extensionNumber3}"
                        th:errorclass="field-error" class="form-control" placeholder="4567">
-                <div class="field-error" th:errors="*{extensionNumber3}"></div>
+                <p th:if = "${#fields.hasErrors('extensionNumber3')}" th:errors="*{extensionNumber3}" class="field-error"></p>
             </div>
         </div>
 

@@ -25,6 +25,9 @@ public class QuestionController {
 
     @GetMapping("/question")
     public String getQuestions(Model model) {
+
+        // if 문으로 emailname 이름이 있느지 확인하고 이미 제출했다는 것 오게하기
+
         List<Question> questions = questionService.findAllQuestions();
         model.addAttribute("question", questions);
         model.addAttribute("answer", new Answer());
