@@ -46,7 +46,6 @@ public class FormController {
         return "form/addForm";
     }
 
-
     @PostMapping("/main")
     public String addItem(@Valid @ModelAttribute FormDto formDto, BindingResult bindingResult,
                           HttpServletRequest request, Model model, HttpSession session) {
@@ -58,6 +57,7 @@ public class FormController {
             getPeriod(model);
             model.addAttribute("errors", bindingResult.getAllErrors());
             formDto = formService.getFormDto(clientIP, clientBrowser); // ip와 broswer 정보를 넣은 빈 껍데기 만들기
+            model.addAttribute("formdto", formDto); // <<< 이 부분을 추가
             return "form/addForm";
         }
 

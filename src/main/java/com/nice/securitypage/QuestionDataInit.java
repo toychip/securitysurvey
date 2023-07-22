@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class QuestionDataInit {
 
     private final QuestionRepository questionRepository;
 
-    @PostConstruct
+//    @PostConstruct
     public void init(){
         Question question1 = Question.builder()
                 .content("PC Filter프로그램 전체실행을 수행한 후 검증된 파일을 제거 또는 암호화 하였습니까?")
