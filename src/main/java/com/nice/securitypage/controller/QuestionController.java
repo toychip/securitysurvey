@@ -59,8 +59,4 @@ public class QuestionController {
         return "endPage";
     }
 
-    @GetMapping("/alreadyFin")
-    public String alreadyFinished() {
-        return "alreadyFin";
-    }
 }

@@ -34,8 +34,9 @@ public class FormController {
 
     @GetMapping("/main")
     public String main(Model model, HttpServletRequest request) {
-        // 점검 시작일
-        getPeriod(model);
+
+        // 점검 날짜 가져오기
+        formService.getPeriod(model);
 
         // 점검 날짜 검증
         String outOfDate = formService.isOutOfDate();
@@ -43,58 +44,64 @@ public class FormController {
             return outOfDate;
         }
 
-        String clientIP = request.getRemoteAddr(); // ip 정보 가져오기
-        String clientBrowser = request.getHeader(HttpHeaders.USER_AGENT);   // 브라우저 정보 가져오기
-        FormDto formDto = formService.getFormDto(clientIP, clientBrowser); // ip와 broswer 정보를 넣은 빈 껍데기 만들기
+        // ip 정보 가져오기
+        String clientIP = request.getRemoteAddr();
+        // 브라우저 정보 가져오기
+        String clientBrowser = request.getHeader(HttpHeaders.USER_AGENT);
+        // ip와 broswer 정보를 넣은 입력할 수 있는 빈 껍데기 만들기
+        FormDto formDto = formService.getFormDto(clientIP, clientBrowser);
         model.addAttribute("formdto", formDto); // view 렌더링
-
         return "form/addForm";
     }
 
     @PostMapping("/main")
     public String addItem(@Validated @ModelAttribute FormDto formDto, BindingResult bindingResult,
                           HttpServletRequest request, Model model, HttpSession session) {
-        String clientIP = request.getRemoteAddr(); // ip 정보 가져오기
-        String clientBrowser = request.getHeader(HttpHeaders.USER_AGENT);   // 브라우저 정보 가져오기
-        String emailname = formDto.getEmailname() + "@nicednr.co.kr";   // 입력한 유저의 이메일 정보 가져오기
+        // ip 정보 가져오기
+        String clientIP = request.getRemoteAddr();
+        // 브라우저 정보 가져오기
+        String clientBrowser = request.getHeader(HttpHeaders.USER_AGENT);
+        // 입력한 유저의 이메일 정보 가져오기
+        String emailname = formDto.getEmailname() + "@nicednr.co.kr";
 
-        if(answerService.isAlready(emailname)){ // 이미 설문을 했는지
-            return "redirect:/alreadyFin";
+        // 이미 설문을 완료 했다면
+        if(answerService.isAlready(emailname)){
+            return "redirect:/alreadyFin";  // 완료한 창으로
         }
 
+        // 입력한 폼이 오류가 있다면
         if (bindingResult.hasErrors()) {
+            // 점검 날짜 가져오기
+            formService.getPeriod(model);
 
-            // 점검 시작일           // 날짜 검증
-            getPeriod(model);
-
+            // 필드 오류들을 필드에러 형태의 리스트로 생성
             List<FieldError> errors = bindingResult.getFieldErrors();
+
+            // 각 오류들을 기입
             for (FieldError error : errors) {
                 model.addAttribute(error.getField(), error.getDefaultMessage());
-            }   // 에러 해결 완
+            }
 
-            // ip와 broswer 정보를 넣은 빈 껍데기 만들기
+            // 사용자가 입력하여 검증이 통과한 필드와 ip와 broswer 정보를 넣은 폼으로 교체 후 렌더링
             formDto = formService.updatedFormDto(formDto, clientIP, clientBrowser);
             model.addAttribute("formdto", formDto);
             return "form/addForm";
         }
 
+        // 검증이 통과한 경우
+        // 데이터 저장
         formService.write(formDto, clientIP, clientBrowser);
+        // 이메일을 세션을 통해 저장
         session.setAttribute("emailname", formDto.getEmailname());
 
         return "redirect:/question";
     }
 
-    public void getPeriod(Model model) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
-        LocalDate fromDate = LocalDate.parse(DateConfig.FROM_DATE, formatter);
-        LocalDate toDate = LocalDate.parse(DateConfig.TO_DATE, formatter);
-
-        model.addAttribute("fromYear", fromDate.getYear());
-        model.addAttribute("fromMonth", fromDate.getMonthValue());
-        model.addAttribute("fromDay", fromDate.getDayOfMonth());
-
-        model.addAttribute("toYear", toDate.getYear());
-        model.addAttribute("toMonth", toDate.getMonthValue());
-        model.addAttribute("toDay", toDate.getDayOfMonth());
+    // 이미 완료한 폼 렌더링
+    @GetMapping("/alreadyFin")
+    public String alreadyFinished() {
+        return "alreadyFin";
     }
+
+
 }
