@@ -1,20 +1,19 @@
 package com.nice.securitypage.controller;
 
+import com.nice.securitypage.dto.AnswerDto;
 import com.nice.securitypage.entity.Answer;
 import com.nice.securitypage.entity.Question;
 import com.nice.securitypage.service.AnswerService;
 import com.nice.securitypage.service.QuestionService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,21 +34,20 @@ public class QuestionController {
     }
 
     @PostMapping("/question")
-    public String submitAnswers(HttpServletRequest request, HttpSession session) {
-
-        List<Long> questionIds = new ArrayList<>();
-        Map<String, String> responseMap = new HashMap<>();
-        for (String paramName : request.getParameterMap().keySet()) {
-            if (paramName.startsWith("questionId")) {
-                questionIds.add(Long.valueOf(request.getParameter(paramName)));
-            }
-            if (paramName.startsWith("response")) {
-                responseMap.put(paramName, request.getParameter(paramName));
-            }
-        }
-
+    public String submitAnswers(
+            @ModelAttribute("answerDto") List<AnswerDto> answerDtoList,
+            HttpSession session, Model model
+    ) {
         String emailname = (String) session.getAttribute("emailname");
-        answerService.submitForm(questionIds, responseMap, emailname);
+        List<String> errors = answerService.submitForm(answerDtoList, emailname);
+
+        if (!errors.isEmpty()) {
+            // Handle the errors. For example, add them to the model and return the same form view.
+            model.addAttribute("errors", errors);
+            model.addAttribute("question", questionService.findAllQuestions());
+            model.addAttribute("answer", new Answer());
+            return "questionForm";
+        }
 
         return "redirect:/endPage";
     }
