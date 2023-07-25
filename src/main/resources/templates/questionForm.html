@@ -12,12 +12,18 @@
     </style>
 </head>
 <body>
+<div th:if="${!#lists.isEmpty(errors)}">
+    <h2>There were errors with your submission:</h2>
+    <ul>
+        <li th:each="error : ${errors}" th:text="${error}"></li>
+    </ul>
+</div>
 <form action="#" th:action="@{/question}" method="post" th:object="${answer}">
     <table>
         <tr>
             <th colspan="4">체크리스트</th>
         </tr>
-        <tr th:each="question, stat : ${question}">
+        <tr th:each="question, stat : ${question}" th:class="${#lists.contains(errors, 'Response for question ID ' + question.id + ' is required') ? 'field-error' : ''}">
             <td th:text="${stat.count}"></td>
             <td th:text="${question.content}">
                 <!-- Question content will be inserted here -->
@@ -55,7 +61,6 @@
                     <input type="hidden" th:name="'questionId' + ${stat.index}" th:value="${question.id}">
                     <input type="text" th:name="'response' + ${stat.index}" placeholder="답변을 입력해주세요">
                 </div>
-
             </td>
         </tr>
     </table>
