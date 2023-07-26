@@ -18,12 +18,12 @@
         <li th:each="error : ${errors}" th:text="${error}"></li>
     </ul>
 </div>
-<form action="#" th:action="@{/question}" method="post" th:object="${answer}">
+<form action="#" th:action="@{/question}" method="post" th:object="${answer}" id="myForm">
     <table>
         <tr>
             <th colspan="4">체크리스트</th>
         </tr>
-        <tr th:each="question, stat : ${question}" th:class="${#lists.contains(errors, 'Response for question ID ' + question.id + ' is required') ? 'field-error' : ''}">
+        <tr th:each="question, stat : ${question}" th:class="${#lists.contains(errors, 'Response for question ID ' + question.id + ' is required') ? 'field-error' : ''}" th:data-id="${question.id}" >
             <td th:text="${stat.count}"></td>
             <td th:text="${question.content}">
                 <!-- Question content will be inserted here -->
@@ -35,22 +35,22 @@
             <td>
                 <!-- radio type -->
                 <div th:if="${question.type.name() == 'RADIO'}">
-                    <input type="hidden" th:name="'questionId' + ${stat.index}" th:value="${question.id}">
-                    <input type="radio" th:name="'response' + ${stat.index}" th:value="'예'"> 예
-                    <input type="radio" th:name="'response' + ${stat.index}" th:value="'아니오'"> 아니오
+                    <input type="hidden" th:id="'questionId' + ${stat.index}" th:name="'questionId' + ${stat.index}" th:value="${question.id}">
+                    <input type="radio" th:id="'responseYes' + ${stat.index}" th:name="'response' + ${question.id}" th:value="'예'"> 예
+                    <input type="radio" th:id="'responseNo' + ${stat.index}" th:name="'response' + ${question.id}" th:value="'아니오'"> 아니오
                 </div>
 
                 <!-- checkbox type -->
                 <div th:if="${question.type.name() == 'CHECKBOX'}">
-                    <input type="hidden" th:name="'questionId' + ${stat.index}" th:value="${question.id}">
-                    <input type="checkbox" th:name="'response' + ${stat.index}" th:value="'예'"> 예
-                    <input type="checkbox" th:name="'response' + ${stat.index}" th:value="'아니오'"> 아니오
+                    <input type="hidden" th:id="'questionId' + ${stat.index}" th:name="'questionId' + ${stat.index}" th:value="${question.id}">
+                    <input type="checkbox" th:id="'responseYes' + ${stat.index}" th:name="'responseYes' + ${stat.index}" th:value="'예'"> 예
+                    <input type="checkbox" th:id="'responseNo' + ${stat.index}" th:name="'responseNo' + ${stat.index}" th:value="'아니오'"> 아니오
                 </div>
 
                 <!-- select type -->
                 <div th:if="${question.type.name() == 'SELECT'}">
-                    <input type="hidden" th:name="'questionId' + ${stat.index}" th:value="${question.id}">
-                    <select th:name="'response' + ${stat.index}">
+                    <input type="hidden" th:id="'questionId' + ${stat.index}" th:name="'questionId' + ${stat.index}" th:value="${question.id}">
+                    <select th:id="'response' + ${stat.index}" th:name="'response' + ${stat.index}">
                         <option th:value="'예'">예</option>
                         <option th:value="'아니오'">아니오</option>
                     </select>
@@ -58,13 +58,63 @@
 
                 <!-- input type -->
                 <div th:if="${question.type.name() == 'INPUT'}">
-                    <input type="hidden" th:name="'questionId' + ${stat.index}" th:value="${question.id}">
-                    <input type="text" th:name="'response' + ${stat.index}" placeholder="답변을 입력해주세요">
+                    <input type="hidden" th:id="'questionId' + ${stat.index}" th:name="'questionId' + ${stat.index}" th:value="${question.id}">
+                    <input type="text" th:id="'response' + ${stat.index}" th:name="'response' + ${stat.index}" placeholder="답변을 입력해주세요">
                 </div>
             </td>
         </tr>
     </table>
     <input type="submit" value="제출">
 </form>
+
+<script type="text/javascript" th:inline="javascript">
+
+    // 일단 모든 요소 불러오고
+    document.addEventListener('DOMContentLoaded', (event) => {
+
+        // 폼요소 받고
+        const form = document.getElementById('myForm');
+
+        form.addEventListener('submit', function(event) { // 서브밋 클릭했을때
+            event.preventDefault();  // 일단 막고
+
+            const requiredQuestions = document.querySelectorAll('.required'); // required 질문만 골라서
+            let missingResponses = []; // null 값인 응답만 넣기
+
+            for (const td of requiredQuestions) {
+                const question = td.parentElement; // tr 요소 가져오고
+                const questionId = `questionId${question.dataset.id}`; // 질문 인덱스 가져오기
+
+                let isChecked = false; // 일단 디폴트값은 false 로 설정
+
+                // 라디오 버튼의 경우
+                const responseRadios = document.querySelectorAll(`input[name="response${question.dataset.id}"]:checked`);
+                if (responseRadios.length > 0) {
+                    isChecked = true; // null 값이 아닌 경우에 참으로 변경, 라디오 버튼은 아무 체크도 안했을 때 기본적으로 null 값임
+                }
+
+                // 체크박스의 경우 => 어디서 문제인지 모르겠어여,, 아마 동적아이디 생성부분에서 잘못되지 않았을까? 하는 생각이 듭니다.
+                const responseYesCheckbox = document.getElementById(`responseYes${questionId}`);
+                const responseNoCheckbox = document.getElementById(`responseNo${questionId}`);
+                if ((responseYesCheckbox && responseYesCheckbox.type === 'checkbox' && responseYesCheckbox.checked) ||
+                    (responseNoCheckbox && responseNoCheckbox.type === 'checkbox' && responseNoCheckbox.checked)) {
+                    isChecked = true;
+                }
+
+                if (!isChecked) {
+                    missingResponses.push(`[${question.dataset.id}] 번 질문에 체크해 주세요`);
+                }
+            }
+
+            if (missingResponses.length === 0) {
+                form.submit();
+            } else {
+                alert(missingResponses[0]);
+            }
+        });
+    });
+
+
+</script>
 </body>
 </html>
