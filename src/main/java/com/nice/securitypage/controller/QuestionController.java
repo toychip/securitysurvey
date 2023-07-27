@@ -37,7 +37,7 @@ public class QuestionController {
 
     @PostMapping("/question")
     public String submitAnswers(
-            @ModelAttribute("answerDto") List<AnswerDto> answerDtoList,
+            @ModelAttribute("answerDtoList") List<AnswerDto> answerDtoList,
             HttpSession session, Model model
     ) {
         String emailname = (String) session.getAttribute("emailname");

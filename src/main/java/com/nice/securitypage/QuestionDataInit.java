@@ -35,25 +35,25 @@ public class QuestionDataInit {
 
         Question question3 = Question.builder()
                 .content("Window 및 옹용프로그램은 최신 보안 패치로 적용되어 있습니까?\n")
-                .isRequired(false)
+                .isRequired(true)
                 .type(ResponseType.RADIO)
                 .build();
 
         Question question4 = Question.builder()
                 .content("window 업데이트 버전이 어떻게 되십니까?")
-                .isRequired(false)
+                .isRequired(true)
                 .type(ResponseType.INPUT)
                 .build();
 
         Question question5 = Question.builder()
                 .content("개인 캐비넷 키는 오픈공간에 보관하지 않으며, 퇴근시 잠금 상태를 확인합니다.")
                 .isRequired(false)
-                .type(ResponseType.RADIO)
+                .type(ResponseType.INPUT)
                 .build();
 
         Question question6 = Question.builder()
                 .content("공용 캐비넷 관리담당자는 되근시 잠금 상태를 확인합니다.")
-                .isRequired(false)
+                .isRequired(true)
                 .type(ResponseType.RADIO)
                 .build();
 
