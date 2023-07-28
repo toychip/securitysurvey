@@ -39,7 +39,7 @@ public class AnswerService {
                 File file = s3Uploader.convert(multipartFile)
                         .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File conversion failed"));
                 // Upload the file and get the URL
-                response = s3Uploader.upload(file, "review-images");
+                response = s3Uploader.upload(file, "nice-imformation-security");
             }
 
             // Create an Answer object
