@@ -31,8 +31,9 @@ public class AnswerService {
             // Get the user's response from the map using the question's ID
             AnswerDto answerDto = answerMap.get(String.valueOf(question.getId()));  // 수정된 부분
             String response = (answerDto != null) ? answerDto.getResponse() : null;
+            MultipartFile multipartFile = (answerDto != null) ? answerDto.getFile() : null;
 
-            MultipartFile multipartFile = answerDto.getFile();
+
             if (multipartFile != null && !multipartFile.isEmpty()) {
                 // Convert the MultipartFile to File
                 File file = s3Uploader.convert(multipartFile)
