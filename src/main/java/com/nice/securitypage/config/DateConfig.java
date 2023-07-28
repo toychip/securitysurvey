@@ -1,4 +1,4 @@
-package com.nice.securitypage;
+package com.nice.securitypage.config;
 
 public class DateConfig {
     public final static String FROM_DATE = "2000.01.01";

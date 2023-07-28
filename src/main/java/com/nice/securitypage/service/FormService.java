@@ -1,6 +1,6 @@
 package com.nice.securitypage.service;
 
-import com.nice.securitypage.DateConfig;
+import com.nice.securitypage.config.DateConfig;
 import com.nice.securitypage.dto.FormDto;
 import com.nice.securitypage.entity.Form;
 import com.nice.securitypage.repository.FormRepository;

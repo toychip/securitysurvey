@@ -1,12 +1,10 @@
 package com.nice.securitypage.controller;
 
-import com.nice.securitypage.DateConfig;
 import com.nice.securitypage.dto.FormDto;
 import com.nice.securitypage.service.AnswerService;
 import com.nice.securitypage.service.FormService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -20,8 +18,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Slf4j

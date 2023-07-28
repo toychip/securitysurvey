@@ -1,4 +1,4 @@
-package com.nice.securitypage;
+package com.nice.securitypage.config;
 
 import com.nice.securitypage.entity.Question;
 import com.nice.securitypage.entity.ResponseType;

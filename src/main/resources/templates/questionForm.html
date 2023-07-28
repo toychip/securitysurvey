@@ -40,9 +40,8 @@
 
                 <div th:if="${question.type.name() == 'PNG'}"> <!-- PNG 타입에 대한 입력 필드 추가 -->
                     <input type="hidden" th:id="'questionId' + ${question.id}" th:name="'questionId' + ${question.id}" th:value="${question.id}">
-                    <input type="file" th:id="'response' + ${question.id}" th:name="'answerMap[' + ${question.id} + '].response'" accept="image/png">
+                    <input type="file" th:id="'file' + ${question.id}" th:name="'answerMap[' + ${question.id} + '].file'" accept="image/png">
                 </div>
-
             </td>
         </tr>
     </table>
@@ -94,7 +93,7 @@
                 const textEntered = textInput && textInput.value.trim() !== '';
 
                 // Check file input fields
-                let fileInput = document.querySelector(`input[name="answerMap[${question.dataset.id}].response"][type="file"]`);
+                let fileInput = document.querySelector(`input[name="answerMap[${question.dataset.id}].file"]`);  // 수정된 부분
                 const fileUploaded = fileInput && fileInput.files.length > 0;
 
                 // 라디오 버튼이 체크되거나 텍스트 입력이 제공된 경우를 확인

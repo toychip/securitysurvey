@@ -1,12 +1,16 @@
 package com.nice.securitypage.service;
 
+import com.nice.securitypage.config.S3Uploader;
 import com.nice.securitypage.dto.AnswerDto;
 import com.nice.securitypage.entity.Answer;
 import com.nice.securitypage.entity.Question;
 import com.nice.securitypage.repository.AnswerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +21,7 @@ public class AnswerService {
 
     private final AnswerRepository answerRepository;
     private final QuestionService questionService;
+    private final S3Uploader s3Uploader;
 
     // 사용자의 답변을 제출하는 메서드
     public void submitForm(Map<String, AnswerDto> answerMap, String emailname) {
@@ -26,6 +31,15 @@ public class AnswerService {
             // Get the user's response from the map using the question's ID
             AnswerDto answerDto = answerMap.get(String.valueOf(question.getId()));  // 수정된 부분
             String response = (answerDto != null) ? answerDto.getResponse() : null;
+
+            MultipartFile multipartFile = answerDto.getFile();
+            if (multipartFile != null && !multipartFile.isEmpty()) {
+                // Convert the MultipartFile to File
+                File file = s3Uploader.convert(multipartFile)
+                        .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File conversion failed"));
+                // Upload the file and get the URL
+                response = s3Uploader.upload(file, "review-images");
+            }
 
             // Create an Answer object
             System.out.println("question = " + question);
