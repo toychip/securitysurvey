@@ -1,6 +1,7 @@
 package com.nice.securitypage.controller;
 
 import com.nice.securitypage.dto.AnswerDto;
+import com.nice.securitypage.dto.AnswerDtoWrapper;
 import com.nice.securitypage.entity.Answer;
 import com.nice.securitypage.entity.Question;
 import com.nice.securitypage.service.AnswerService;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,30 +29,20 @@ public class QuestionController {
     @GetMapping("/question")
     public String getQuestions(Model model) {
 
-        // if 문으로 emailname 이름이 있느지 확인하고 이미 제출했다는 것 오게하기
-
         List<Question> questions = questionService.findAllQuestions();
         model.addAttribute("question", questions);
-        model.addAttribute("answer", new Answer());
-        model.addAttribute("errors", new ArrayList<>()); // Add this line
+        model.addAttribute("answerDtoWrapper", new AnswerDtoWrapper());  // 추가된 부분
         return "questionForm";
     }
 
     @PostMapping("/question")
     public String submitAnswers(
-            @ModelAttribute("answerDtoList") List<AnswerDto> answerDtoList,
-            HttpSession session, Model model
+            @ModelAttribute AnswerDtoWrapper answerDtoWrapper,
+            HttpSession session
     ) {
+        System.out.println("answerDtoWrapper = " + answerDtoWrapper.getAnswerMap().values());
         String emailname = (String) session.getAttribute("emailname");
-        List<String> errors = answerService.submitForm(answerDtoList, emailname);
-
-        if (!errors.isEmpty()) {
-            // Handle the errors. For example, add them to the model and return the same form view.
-            model.addAttribute("errors", errors);
-            model.addAttribute("question", questionService.findAllQuestions());
-            model.addAttribute("answer", new Answer());
-            return "questionForm";
-        }
+        answerService.submitForm(answerDtoWrapper.getAnswerMap(), emailname);
 
         return "redirect:/endPage";
     }
@@ -58,5 +51,4 @@ public class QuestionController {
     public String endPage() {
         return "endPage";
     }
-
 }

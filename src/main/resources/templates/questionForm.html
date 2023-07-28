@@ -12,41 +12,32 @@
     </style>
 </head>
 <body>
-<div th:if="${!#lists.isEmpty(errors)}">
-    <h2>There were errors with your submission:</h2>
-    <ul>
-        <li th:each="error : ${errors}" th:text="${error}"></li>
-    </ul>
-</div>
-<form action="#" th:action="@{/question}" method="post" th:object="${answer}" id="myForm">
+
+<form action="#" th:action="@{/question}" method="post" th:object="${answerDtoWrapper}" id="myForm">
     <table>
         <tr>
             <th colspan="4">체크리스트</th>
         </tr>
-        <tr th:each="question, stat : ${question}" th:class="${#lists.contains(errors, 'Response for question ID ' + question.id + ' is required') ? 'field-error' : ''}" th:data-id="${question.id}" >
+        <tr th:each="question, stat : ${question}" th:data-id="${question.id}" >
             <td th:text="${stat.count}"></td>
             <td th:text="${question.content}">
-                <!-- Question content will be inserted here -->
             </td>
             <td th:class="${question.isRequired ? 'required' : 'optional'}"
                 th:text="${question.isRequired ? '필수' : '선택'}">
                 <!-- '필수' or '선택' will be inserted here depending on the value of isRequired -->
             </td>
             <td>
-                <!-- radio type -->
                 <div th:if="${question.type.name() == 'RADIO'}">
                     <input type="hidden" th:id="'questionId' + ${question.id}" th:name="'questionId' + ${question.id}" th:value="${question.id}">
-                    <input type="radio" th:id="'responseYes' + ${question.id}" th:name="'response' + ${question.id}" th:value="'예'"> 예
-                    <input type="radio" th:id="'responseNo' + ${question.id}" th:name="'response' + ${question.id}" th:value="'아니오'"> 아니오
+                    <input type="radio" th:id="'responseYes' + ${question.id}"  th:name="'answerMap[' + ${question.id} + '].response'" th:value="'예'"> 예
+                    <input type="radio" th:id="'responseNo' + ${question.id}"  th:name="'answerMap[' + ${question.id} + '].response'"  th:value="'아니오'"> 아니오
                 </div>
 
                 <div th:if="${question.type.name() == 'INPUT'}">
                     <input type="hidden" th:id="'questionId' + ${question.id}" th:name="'questionId' + ${question.id}" th:value="${question.id}">
-                    <input type="text" th:id="'response' + ${question.id}" th:name="'response' + ${question.id}" placeholder="답변을 입력해주세요">
-                    <!-- Debugging output -->
-                    <span th:text="'Generated questionId: ' + ${question.id}"></span>
-                    <span th:text="'Generated responseId: ' + 'response' + ${question.id}"></span>
+                    <input type="text" th:id="'response' + ${question.id}" th:name="'answerMap[' + ${question.id} + '].response'" placeholder="답변을 입력해주세요">
                 </div>
+
             </td>
         </tr>
     </table>
@@ -71,13 +62,13 @@
                 const question = td.parentElement; // tr 요소 가져오고
                 const questionId = `questionId${question.dataset.id}`; // 질문 인덱스 가져오기
 
-                // 라디오 버튼의 경우
-                const responseRadios = document.querySelectorAll(`input[name="response${question.dataset.id}"]:checked`);
-                const radioChecked = responseRadios.length > 0; // null 값이 아닌 경우에 참으로 변경, 라디오 버튼은 아무 체크도 안했을 때 기본적으로 null 값임
+// 라디오 버튼의 경우
+                const responseRadios = document.querySelectorAll(`input[name="answerMap[${question.dataset.id}].response"]:checked`);
+                const radioChecked = responseRadios.length > 0;
 
                 // Check text input fields
-                let textInput = document.querySelector(`input[name="response${question.dataset.id}"][type="text"]`);
-                const textEntered = textInput && textInput.value.trim() !== ''; // Text input was provided
+                let textInput = document.querySelector(`input[name="answerMap[${question.dataset.id}].response"][type="text"]`);
+                const textEntered = textInput && textInput.value.trim() !== '';
 
                 // 라디오 버튼이 체크되거나 텍스트 입력이 제공된 경우를 확인
                 let isChecked = radioChecked || textEntered;
@@ -90,6 +81,7 @@
                     missingResponses.push(`[${question.dataset.id}] 번 질문에 체크하거나 답변을 입력해 주세요`);
                 }
             }
+
 
 
             if (missingResponses.length === 0) {

@@ -1,7 +1,16 @@
 package com.nice.securitypage.dto;
 
-import java.util.List;
+import lombok.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@ToString
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class AnswerDtoWrapper {
-    private List<AnswerDto> answer;
+    private Map<String, AnswerDto> answerMap = new HashMap<>();
 }

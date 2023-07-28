@@ -18,40 +18,31 @@ public class AnswerService {
     private final AnswerRepository answerRepository;
     private final QuestionService questionService;
 
-    public List<String> submitForm(List<AnswerDto> answerDtoList, String emailname) {
-        List<String> errors = new ArrayList<>();
+    // 사용자의 답변을 제출하는 메서드
+    public void submitForm(Map<String, AnswerDto> answerMap, String emailname) {
         List<Question> questions = questionService.findAllQuestions();
 
-        // First, validate all responses
-        for (int i = 0; i < questions.size(); i++) {
-            Question question = questions.get(i);
-            String response = answerDtoList.get(i).getResponse();
+        for(Question question : questions) {
+            // Get the user's response from the map using the question's ID
+            AnswerDto answerDto = answerMap.get(String.valueOf(question.getId()));  // 수정된 부분
+            String response = (answerDto != null) ? answerDto.getResponse() : null;
 
-            // If the question is required but the response is null, add an error message
-            if (question.getIsRequired() && response == null) {
-                errors.add("Response for question ID '" + question.getId() + "' is required");
-            }
+            // Create an Answer object
+            System.out.println("question = " + question);
+            System.out.println("response = " + response);
+            Answer answer = Answer.builder()
+                    .content(question.getContent())
+                    .isRequired(question.getIsRequired())
+                    .response(response)
+                    .emailname(emailname + "@nicednr.co.kr")
+                    .build();
+
+            // Save the Answer object
+            answerRepository.save(answer);
         }
-
-        // If there are no errors, save all responses
-        if (errors.isEmpty()) {
-            for (int i = 0; i < questions.size(); i++) {
-                Question question = questions.get(i);
-                String response = answerDtoList.get(i).getResponse();
-
-                Answer builderAnswer = Answer.builder()
-                        .content(question.getContent())
-                        .isRequired(question.getIsRequired())
-                        .response(response)
-                        .emailname(emailname)
-                        .build();
-
-                answerRepository.save(builderAnswer);
-            }
-        }
-
-        return errors;
     }
+
+    // 이메일 이름이 이미 존재하는지 확인하는 메서드
     public boolean isAlready(String emailname) {
         return answerRepository.existsByEmailname(emailname);
     }
