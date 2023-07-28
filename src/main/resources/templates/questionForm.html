@@ -52,6 +52,19 @@
         // 폼요소 받고
         const form = document.getElementById('myForm');
 
+        let lastCheckedTime = null;  // 추가된 부분
+
+        document.querySelectorAll('input[type=radio]').forEach(function(radio) {  // 추가된 부분
+            radio.addEventListener('click', function(event) {
+                if (lastCheckedTime !== null && Date.now() - lastCheckedTime < 3000) {
+                    event.preventDefault();
+                    alert('문항을 읽어보고 클릭해주세요.');
+                } else {
+                    lastCheckedTime = Date.now();
+                }
+            });
+        });  // 추가된 부분 끝
+
         form.addEventListener('submit', function(event) { // 서브밋 클릭했을때
             event.preventDefault();  // 일단 막고
 
@@ -62,7 +75,7 @@
                 const question = td.parentElement; // tr 요소 가져오고
                 const questionId = `questionId${question.dataset.id}`; // 질문 인덱스 가져오기
 
-// 라디오 버튼의 경우
+                // 라디오 버튼의 경우
                 const responseRadios = document.querySelectorAll(`input[name="answerMap[${question.dataset.id}].response"]:checked`);
                 const radioChecked = responseRadios.length > 0;
 
@@ -82,8 +95,6 @@
                 }
             }
 
-
-
             if (missingResponses.length === 0) {
                 form.submit();
             } else {
@@ -91,8 +102,6 @@
             }
         });
     });
-
-
 </script>
 </body>
 </html>
