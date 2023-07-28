@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<form action="#" th:action="@{/question}" method="post" th:object="${answerDtoWrapper}" id="myForm">
+<form action="#" th:action="@{/question}" method="post" th:object="${answerDtoWrapper}" id="myForm" enctype="multipart/form-data">
     <table>
         <tr>
             <th colspan="4">체크리스트</th>
@@ -38,6 +38,11 @@
                     <input type="text" th:id="'response' + ${question.id}" th:name="'answerMap[' + ${question.id} + '].response'" placeholder="답변을 입력해주세요">
                 </div>
 
+                <div th:if="${question.type.name() == 'PNG'}"> <!-- PNG 타입에 대한 입력 필드 추가 -->
+                    <input type="hidden" th:id="'questionId' + ${question.id}" th:name="'questionId' + ${question.id}" th:value="${question.id}">
+                    <input type="file" th:id="'response' + ${question.id}" th:name="'answerMap[' + ${question.id} + '].response'" accept="image/png">
+                </div>
+
             </td>
         </tr>
     </table>
@@ -54,9 +59,14 @@
 
         let lastCheckedTime = null;  // 추가된 부분
 
-        document.querySelectorAll('input[type=radio]').forEach(function(radio) {  // 추가된 부분
-            radio.addEventListener('click', function(event) {
-                if (lastCheckedTime !== null && Date.now() - lastCheckedTime < 3000) {
+        const firstQuestionFileInput = document.querySelector('input[type=file]');  // 추가된 부분
+
+        document.querySelectorAll('input[type=radio], input[type=text]').forEach(function(input) {  // 추가된 부분
+            input.addEventListener('click', function(event) {
+                if (firstQuestionFileInput.files.length === 0) {
+                    event.preventDefault();
+                    alert('파일 업로드를 먼저 하셔야 합니다.');
+                } else if (lastCheckedTime !== null && Date.now() - lastCheckedTime < 3000) {
                     event.preventDefault();
                     alert('문항을 읽어보고 클릭해주세요.');
                 } else {
@@ -83,12 +93,17 @@
                 let textInput = document.querySelector(`input[name="answerMap[${question.dataset.id}].response"][type="text"]`);
                 const textEntered = textInput && textInput.value.trim() !== '';
 
+                // Check file input fields
+                let fileInput = document.querySelector(`input[name="answerMap[${question.dataset.id}].response"][type="file"]`);
+                const fileUploaded = fileInput && fileInput.files.length > 0;
+
                 // 라디오 버튼이 체크되거나 텍스트 입력이 제공된 경우를 확인
-                let isChecked = radioChecked || textEntered;
+                let isChecked = radioChecked || textEntered || fileUploaded;
 
                 console.log('Question ID:', questionId);
                 console.log('Radio checked:', radioChecked);
                 console.log('Text entered:', textEntered);
+                console.log('File uploaded:', fileUploaded);
 
                 if (!isChecked) {
                     missingResponses.push(`[${question.dataset.id}] 번 질문에 체크하거나 답변을 입력해 주세요`);
@@ -102,6 +117,7 @@
             }
         });
     });
+
 </script>
 </body>
 </html>

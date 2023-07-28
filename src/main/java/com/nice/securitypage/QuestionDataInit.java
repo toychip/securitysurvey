@@ -19,9 +19,13 @@ public class QuestionDataInit {
     @PostConstruct
     public void init(){
         Question question1 = Question.builder()
-                .content("PC Filter프로그램 전체실행을 수행한 후 검증된 파일을 제거 또는 암호화 하였습니까?")
+                .content("PC-Filter프로그램 전체실행을 수행한 후 검출된 파일을 제거 또는 암호화 하였습니까?\n" +
+                        "개인 PC 및 생활보안 점검사항을 제출하시려면\n" +
+                        "사전에 PCFilter를 실행하여 전체검사 하신후 PCFilter화면을 캡처하시기 바랍니다.\n" +
+                        "PCFilter화면 캡처(Alt + PrintScrn)하시고 윈도우 보조프로그램 중 그림판을 실행하여\n" +
+                        "붙여넣기(Ctrl + V)후 저장하시면 됩니다.")
                 .isRequired(true)
-                .type(ResponseType.RADIO)
+                .type(ResponseType.PNG)
                 .build();
 
         Question question2 = Question.builder()
