@@ -35,31 +35,17 @@
             <td>
                 <!-- radio type -->
                 <div th:if="${question.type.name() == 'RADIO'}">
-                    <input type="hidden" th:id="'questionId' + ${stat.index}" th:name="'questionId' + ${stat.index}" th:value="${question.id}">
-                    <input type="radio" th:id="'responseYes' + ${stat.index}" th:name="'response' + ${question.id}" th:value="'예'"> 예
-                    <input type="radio" th:id="'responseNo' + ${stat.index}" th:name="'response' + ${question.id}" th:value="'아니오'"> 아니오
+                    <input type="hidden" th:id="'questionId' + ${question.id}" th:name="'questionId' + ${question.id}" th:value="${question.id}">
+                    <input type="radio" th:id="'responseYes' + ${question.id}" th:name="'response' + ${question.id}" th:value="'예'"> 예
+                    <input type="radio" th:id="'responseNo' + ${question.id}" th:name="'response' + ${question.id}" th:value="'아니오'"> 아니오
                 </div>
 
-                <!-- checkbox type -->
-                <div th:if="${question.type.name() == 'CHECKBOX'}">
-                    <input type="hidden" th:id="'questionId' + ${stat.index}" th:name="'questionId' + ${stat.index}" th:value="${question.id}">
-                    <input type="checkbox" th:id="'responseYes' + ${stat.index}" th:name="'responseYes' + ${stat.index}" th:value="'예'"> 예
-                    <input type="checkbox" th:id="'responseNo' + ${stat.index}" th:name="'responseNo' + ${stat.index}" th:value="'아니오'"> 아니오
-                </div>
-
-                <!-- select type -->
-                <div th:if="${question.type.name() == 'SELECT'}">
-                    <input type="hidden" th:id="'questionId' + ${stat.index}" th:name="'questionId' + ${stat.index}" th:value="${question.id}">
-                    <select th:id="'response' + ${stat.index}" th:name="'response' + ${stat.index}">
-                        <option th:value="'예'">예</option>
-                        <option th:value="'아니오'">아니오</option>
-                    </select>
-                </div>
-
-                <!-- input type -->
                 <div th:if="${question.type.name() == 'INPUT'}">
-                    <input type="hidden" th:id="'questionId' + ${stat.index}" th:name="'questionId' + ${stat.index}" th:value="${question.id}">
-                    <input type="text" th:id="'response' + ${stat.index}" th:name="'response' + ${stat.index}" placeholder="답변을 입력해주세요">
+                    <input type="hidden" th:id="'questionId' + ${question.id}" th:name="'questionId' + ${question.id}" th:value="${question.id}">
+                    <input type="text" th:id="'response' + ${question.id}" th:name="'response' + ${question.id}" placeholder="답변을 입력해주세요">
+                    <!-- Debugging output -->
+                    <span th:text="'Generated questionId: ' + ${question.id}"></span>
+                    <span th:text="'Generated responseId: ' + 'response' + ${question.id}"></span>
                 </div>
             </td>
         </tr>
@@ -85,26 +71,26 @@
                 const question = td.parentElement; // tr 요소 가져오고
                 const questionId = `questionId${question.dataset.id}`; // 질문 인덱스 가져오기
 
-                let isChecked = false; // 일단 디폴트값은 false 로 설정
-
                 // 라디오 버튼의 경우
                 const responseRadios = document.querySelectorAll(`input[name="response${question.dataset.id}"]:checked`);
-                if (responseRadios.length > 0) {
-                    isChecked = true; // null 값이 아닌 경우에 참으로 변경, 라디오 버튼은 아무 체크도 안했을 때 기본적으로 null 값임
-                }
+                const radioChecked = responseRadios.length > 0; // null 값이 아닌 경우에 참으로 변경, 라디오 버튼은 아무 체크도 안했을 때 기본적으로 null 값임
 
-                // 체크박스의 경우 => 어디서 문제인지 모르겠어여,, 아마 동적아이디 생성부분에서 잘못되지 않았을까? 하는 생각이 듭니다.
-                const responseYesCheckbox = document.getElementById(`responseYes${questionId}`);
-                const responseNoCheckbox = document.getElementById(`responseNo${questionId}`);
-                if ((responseYesCheckbox && responseYesCheckbox.type === 'checkbox' && responseYesCheckbox.checked) ||
-                    (responseNoCheckbox && responseNoCheckbox.type === 'checkbox' && responseNoCheckbox.checked)) {
-                    isChecked = true;
-                }
+                // Check text input fields
+                let textInput = document.querySelector(`input[name="response${question.dataset.id}"][type="text"]`);
+                const textEntered = textInput && textInput.value.trim() !== ''; // Text input was provided
+
+                // 라디오 버튼이 체크되거나 텍스트 입력이 제공된 경우를 확인
+                let isChecked = radioChecked || textEntered;
+
+                console.log('Question ID:', questionId);
+                console.log('Radio checked:', radioChecked);
+                console.log('Text entered:', textEntered);
 
                 if (!isChecked) {
-                    missingResponses.push(`[${question.dataset.id}] 번 질문에 체크해 주세요`);
+                    missingResponses.push(`[${question.dataset.id}] 번 질문에 체크하거나 답변을 입력해 주세요`);
                 }
             }
+
 
             if (missingResponses.length === 0) {
                 form.submit();
