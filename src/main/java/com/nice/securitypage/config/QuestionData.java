@@ -3,16 +3,14 @@ package com.nice.securitypage.config;
 import com.nice.securitypage.entity.Question;
 import com.nice.securitypage.entity.ResponseType;
 import com.nice.securitypage.repository.QuestionRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 
 //@Component
 @RequiredArgsConstructor
-public class QuestionDataInit {
+public class QuestionData {
 
     private final QuestionRepository questionRepository;
 

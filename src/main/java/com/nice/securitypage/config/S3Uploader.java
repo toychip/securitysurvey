@@ -24,6 +24,7 @@ import java.util.Optional;
 public class S3Uploader {
 
     private final AmazonS3 amazonS3Client;
+    private final AESUtilConfig aesUtilConfig;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -42,7 +43,10 @@ public class S3Uploader {
     }
 
     public String upload(File uploadFile, String dirName) {
-        String fileName = dirName + "/" + uploadFile.getName();
+
+        String encryptFileName = aesUtilConfig.encrypt(uploadFile.getName());
+
+        String fileName = dirName + "/" + encryptFileName;
         String uploadImageUrl = putS3(uploadFile, fileName);
 
         removeNewFile(uploadFile);  // 로컬에 생성된 File 삭제

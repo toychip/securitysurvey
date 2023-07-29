@@ -1,8 +1,6 @@
 package com.nice.securitypage.controller;
 
-import com.nice.securitypage.dto.AnswerDto;
 import com.nice.securitypage.dto.AnswerDtoWrapper;
-import com.nice.securitypage.entity.Answer;
 import com.nice.securitypage.entity.Question;
 import com.nice.securitypage.service.AnswerService;
 import com.nice.securitypage.service.QuestionService;
@@ -14,10 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
