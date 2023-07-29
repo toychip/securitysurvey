@@ -94,5 +94,22 @@
         </div>
     </form>
 </div>
+
+<script>
+    window.onload = function() {
+        // ID 배열
+        const ids = ['name', 'emailname', 'phoneNumber1', 'phoneNumber2', 'phoneNumber3', 'extensionNumber1', 'extensionNumber2', 'extensionNumber3'];
+
+        ids.forEach(id => {
+            // 페이지 로드 시 저장된 값을 불러와서 입력 필드에 채워넣는 코드
+            document.getElementById(id).value = localStorage.getItem(id) || '';
+
+            // 각 입력 필드에 이벤트 리스너를 붙여서, 값이 변경될 때마다 그 값을 로컬 스토리지에 저장하는 코드
+            document.getElementById(id).addEventListener('input', function() {
+                localStorage.setItem(id, this.value);
+            });
+        });
+    };
+</script>
 </body>
 </html>
