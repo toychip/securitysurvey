@@ -1,8 +1,10 @@
 package com.nice.securitypage.controller;
 
 import com.nice.securitypage.dto.FormDto;
+import com.nice.securitypage.entity.Organization;
 import com.nice.securitypage.service.AnswerService;
 import com.nice.securitypage.service.FormService;
+import com.nice.securitypage.service.OrganizationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +27,12 @@ import java.util.List;
 @RequestMapping("/")
 @RequiredArgsConstructor
 public class FormController {
+    // 개인정보 서비스
     private final FormService formService;
+    // 설문조사 서비스
     private final AnswerService answerService;
+    // 부서 정보 서비스
+    private final OrganizationService organizationService;
 
     @GetMapping("/main")
     public String main(Model model, HttpServletRequest request) {
@@ -39,6 +45,9 @@ public class FormController {
         if (outOfDate != null) {
             return outOfDate;
         }
+
+        List<Organization> organizations = organizationService.getOrganization();
+        model.addAttribute("organizations", organizations);
 
         // ip 정보 가져오기
         String clientIP = request.getRemoteAddr();

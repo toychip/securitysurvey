@@ -11,6 +11,8 @@ import lombok.*;
 @Setter
 public class FormDto {
 
+    // 부서 코드
+    private Integer departmentId;
     // 이름
     @NotBlank(message = "이름은 필수입니다.")
     private String name;
