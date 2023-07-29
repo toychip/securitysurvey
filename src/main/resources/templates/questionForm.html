@@ -60,7 +60,25 @@
 
         const firstQuestionFileInput = document.querySelector('input[type=file]');  // 추가된 부분
 
-        document.querySelectorAll('input[type=radio], input[type=text]').forEach(function(input) {  // 추가된 부분
+        // 새로 추가한 부분
+        document.querySelectorAll('input[type=radio], input[type=text]').forEach(function(input) {
+            // 라디오 버튼이 체크되었는지와 해당 라디오 버튼의 값이 같은지 확인하여 라디오 버튼의 상태를 복원
+            if (input.type === 'radio') {
+                const checkedValue = localStorage.getItem(input.name);
+                input.checked = (checkedValue !== null && checkedValue === input.value);
+            } else {
+                input.value = localStorage.getItem(input.name) || '';
+            }
+
+            // 각 입력 필드에 이벤트 리스너를 붙여서, 값이 변경될 때마다 그 값을 로컬 스토리지에 저장하는 코드
+            input.addEventListener('input', function() {
+                if (input.type === 'radio' && input.checked) {
+                    localStorage.setItem(input.name, this.value);
+                } else if (input.type === 'text') {
+                    localStorage.setItem(input.name, this.value);
+                }
+            });
+
             input.addEventListener('click', function(event) {
                 if (firstQuestionFileInput.files.length === 0) {
                     event.preventDefault();
@@ -72,8 +90,9 @@
                     lastCheckedTime = Date.now();
                 }
             });
-        });  // 추가된 부분 끝
+        });
 
+        // 나머지 코드...
         form.addEventListener('submit', function(event) { // 서브밋 클릭했을때
             event.preventDefault();  // 일단 막고
 
