@@ -96,5 +96,12 @@ public class FormService {
         return null;
     }
 
+    public boolean isAlready(String emailname) {
+
+
+        return formRepository.existsByEmailname(emailname);
+    }
+
+
 
 }

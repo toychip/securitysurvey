@@ -53,9 +53,8 @@ public class FormController {
     @PostMapping("/main")
     public String addItem(@Validated @ModelAttribute FormDto formDto, BindingResult bindingResult,
                           HttpServletRequest request, Model model, HttpSession session) {
-        // ip 정보 가져오기
+        // ip, 브라우저 정보 가져오기
         String clientIP = request.getRemoteAddr();
-        // 브라우저 정보 가져오기
         String clientBrowser = request.getHeader(HttpHeaders.USER_AGENT);
         // 입력한 유저의 이메일 정보 가져오기
         String emailname = formDto.getEmailname() + "@nicednr.co.kr";
@@ -78,6 +77,7 @@ public class FormController {
                 model.addAttribute(error.getField(), error.getDefaultMessage());
             }
 
+
             // 사용자가 입력하여 검증이 통과한 필드와 ip와 broswer 정보를 넣은 폼으로 교체 후 렌더링
             formDto = formService.updatedFormDto(formDto, clientIP, clientBrowser);
             model.addAttribute("formdto", formDto);
@@ -85,13 +85,21 @@ public class FormController {
         }
 
         // 검증이 통과한 경우
-        // 데이터 저장
-        formService.write(formDto, clientIP, clientBrowser);
+
+        // Form DB에 존재하고, Answer DB에는 존재하지 않는 경우에는 데이터를 저장하지 않고 question으로 return
+        // Form DB와 ANswer DB에 둘 다 존재하지 않는 경우에만 데이터 추가
+        if(!formService.isAlready(emailname)){
+            // 데이터 저장
+            formService.write(formDto, clientIP, clientBrowser);
+        }
+
         // 이메일을 세션을 통해 저장
         session.setAttribute("emailname", formDto.getEmailname());
 
         return "redirect:/question";
     }
+
+
 
     // 이미 완료한 폼 렌더링
     @GetMapping("/alreadyFin")
