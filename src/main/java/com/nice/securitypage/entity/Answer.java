@@ -20,5 +20,6 @@ public class Answer {
     private Boolean isRequired;
 
     private String emailname;   // 사용자의 이메일
+    @Column(columnDefinition = "TEXT")
     private String response;  // 사용자의 답변 (예: true, 아니오: false 혹은 String)
 }
