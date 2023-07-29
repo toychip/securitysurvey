@@ -61,7 +61,6 @@ public class QuestionData {
 
         List<Question> questions = Arrays.asList(question1, question2, question3, question4, question5, question6);
 
-        // 저장하기
         questionRepository.saveAll(questions);
     }
 }

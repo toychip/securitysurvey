@@ -96,9 +96,8 @@ public class FormService {
         return null;
     }
 
-    public boolean isAlready(String emailname) {
-
-
+    // Form DB에 존재하다면
+    public boolean alreadyExistsValidate(String emailname) {
         return formRepository.existsByEmailname(emailname);
     }
 

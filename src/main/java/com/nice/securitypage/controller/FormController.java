@@ -60,7 +60,7 @@ public class FormController {
         String emailname = formDto.getEmailname() + "@nicednr.co.kr";
 
         // 이미 설문을 완료 했다면
-        if(answerService.isAlready(emailname)){
+        if(answerService.alreadyExistsValidate(emailname)){
             return "redirect:/alreadyFin";  // 완료한 창으로
         }
 
@@ -77,7 +77,6 @@ public class FormController {
                 model.addAttribute(error.getField(), error.getDefaultMessage());
             }
 
-
             // 사용자가 입력하여 검증이 통과한 필드와 ip와 broswer 정보를 넣은 폼으로 교체 후 렌더링
             formDto = formService.updatedFormDto(formDto, clientIP, clientBrowser);
             model.addAttribute("formdto", formDto);
@@ -88,7 +87,7 @@ public class FormController {
 
         // Form DB에 존재하고, Answer DB에는 존재하지 않는 경우에는 데이터를 저장하지 않고 question으로 return
         // Form DB와 ANswer DB에 둘 다 존재하지 않는 경우에만 데이터 추가
-        if(!formService.isAlready(emailname)){
+        if(!formService.alreadyExistsValidate(emailname)){
             // 데이터 저장
             formService.write(formDto, clientIP, clientBrowser);
         }
@@ -99,13 +98,10 @@ public class FormController {
         return "redirect:/question";
     }
 
-
-
     // 이미 완료한 폼 렌더링
     @GetMapping("/alreadyFin")
     public String alreadyFinished() {
         return "alreadyFin";
     }
-
 
 }
