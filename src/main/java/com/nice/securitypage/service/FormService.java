@@ -26,10 +26,12 @@ public class FormService {
         // 입력한 필드에 사내메일주소 합치기
         String emailname = formDto.getEmailname() + "@nicednr.co.kr";
 
+
         // builder 형식으로 객체 생성
         Form form = Form.builder()
                 .name(formDto.getName())
                 .emailname(emailname)
+                .organization(formDto.getOrganization())
                 .phoneNumber(phoneNumber)
                 .extensionNumber(extensionNumber)
                 .ip(clientIP)
@@ -54,6 +56,7 @@ public class FormService {
         FormDto formDto = FormDto.builder()
                 .name(inputFormDto.getName())
                 .emailname(inputFormDto.getEmailname())
+                .organization(inputFormDto.getOrganization())
                 .phoneNumber1(inputFormDto.getPhoneNumber1())
                 .phoneNumber2(inputFormDto.getPhoneNumber2())
                 .phoneNumber3(inputFormDto.getPhoneNumber3())

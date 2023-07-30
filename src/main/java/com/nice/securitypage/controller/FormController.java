@@ -90,6 +90,11 @@ public class FormController {
 
             // 사용자가 입력하여 검증이 통과한 필드와 ip와 broswer 정보를 넣은 폼으로 교체 후 렌더링
             formDto = formService.updatedFormDto(formDto, clientIP, clientBrowser);
+
+            // 전체 부서 목록을 가져와서 모델에 추가
+            Map<Organization, Integer> organizations = organizationService.getOrganization();
+            model.addAttribute("organizations", organizations);
+
             model.addAttribute("formdto", formDto);
             return "form/addForm";
         }

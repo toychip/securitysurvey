@@ -25,14 +25,14 @@
 
     <form th:action th:object="${formdto}" method="post">
         <div>
-            <label for="department">부서</label>
-            <select id="department" th:field="*{departmentId}" class="form-control">
-                <option value="" selected>부서를 선택해주세요</option>
+            <label for="organization">부서</label>
+            <select id="organization" th:field="*{organization}" class="form-control">
+            <option value="" selected>부서를 선택해주세요</option>
                 <option th:each="orgIndent : ${organizations.entrySet()}" th:value="${orgIndent.key.id}"
                         th:disabled="${#strings.endsWith(orgIndent.key.name, '본부')}"
                         th:utext="${#strings.repeat('&nbsp;', orgIndent.value*2) + orgIndent.key.name}"></option>
             </select>
-            <p th:if="${departmentId != null}" th:text="${departmentId}" class="field-error"></p>
+            <p th:if="${organization != null}" th:text="${organization}" class="field-error"></p>
         </div>
         <div>
             <label for="name" th:text="#{label.formdto.name}">이름</label>

@@ -21,6 +21,8 @@ public class Form {
     private Long id;
     // 이름
     private String name;
+    // 부서
+    private String organization;
     // 이메일(사내)
     private String emailname;
     // 휴대폰 번호
