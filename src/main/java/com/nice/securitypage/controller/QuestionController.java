@@ -22,7 +22,13 @@ public class QuestionController {
     private final AnswerService answerService;
 
     @GetMapping("/question")
-    public String getQuestions(Model model) {
+    public String getQuestions(Model model, HttpSession session) {
+
+        // form을 입력하지 않고 url에 question을 직접 입력하고 들어온 경우
+        var emailname = session.getAttribute("emailname");
+        if(emailname == null){
+            return "redirect:/main";
+        }
 
         // 질문을 DB에서 동적으로 갖고옴
         List<Question> questions = questionService.findAllQuestions();

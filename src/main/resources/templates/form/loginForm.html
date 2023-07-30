@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>NICE D&R - Manager Login</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-md-6 offset-md-3">
+      <h2 class="text-center">NICE D&R</h2>
+      <h3 class="text-center">나이스 관리자 페이지</h3>
+      <form th:action="@{/login}" th:object="${managerDto}" method="post">
+        <div class="form-group">
+          <label for="username">아이디</label>
+          <input type="text" th:field="*{username}" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+          <label for="password">비밀번호</label>
+          <input type="password" th:field="*{password}" class="form-control" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">로그인</button>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>
