@@ -27,10 +27,10 @@
         <div>
             <label for="organization">부서</label>
             <select id="organization" th:field="*{organization}" class="form-control">
-            <option value="" selected>부서를 선택해주세요</option>
-                <option th:each="orgIndent : ${organizations.entrySet()}" th:value="${orgIndent.key.id}"
-                        th:disabled="${#strings.endsWith(orgIndent.key.name, '본부')}"
-                        th:utext="${#strings.repeat('&nbsp;', orgIndent.value*2) + orgIndent.key.name}"></option>
+                <option value="" selected>부서를 선택해주세요</option>
+                <option th:each="orgIndent : ${organizations.entrySet()}" th:value="${orgIndent.key}"
+                        th:disabled="${#strings.endsWith(orgIndent.key, '본부')}"
+                        th:utext="${#strings.repeat('&nbsp;', orgIndent.value*2) + orgIndent.key}"></option>
             </select>
             <p th:if="${organization != null}" th:text="${organization}" class="field-error"></p>
         </div>

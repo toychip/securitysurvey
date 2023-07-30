@@ -48,7 +48,7 @@ public class FormController {
             return outOfDate;
         }
 
-        Map<Organization, Integer> organizations = organizationService.getOrganization();
+        Map<String, Integer> organizations = organizationService.getOrganization();
         model.addAttribute("organizations", organizations);
 
         // ip 정보 가져오기
@@ -92,7 +92,7 @@ public class FormController {
             formDto = formService.updatedFormDto(formDto, clientIP, clientBrowser);
 
             // 전체 부서 목록을 가져와서 모델에 추가
-            Map<Organization, Integer> organizations = organizationService.getOrganization();
+            Map<String, Integer> organizations = organizationService.getOrganization();
             model.addAttribute("organizations", organizations);
 
             model.addAttribute("formdto", formDto);
