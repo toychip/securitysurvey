@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -46,7 +48,7 @@ public class FormController {
             return outOfDate;
         }
 
-        List<Organization> organizations = organizationService.getOrganization();
+        Map<Organization, Integer> organizations = organizationService.getOrganization();
         model.addAttribute("organizations", organizations);
 
         // ip 정보 가져오기

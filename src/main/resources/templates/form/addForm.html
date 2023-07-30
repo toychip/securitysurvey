@@ -24,23 +24,13 @@
     </div>
 
     <form th:action th:object="${formdto}" method="post">
-
         <div>
             <label for="department">부서</label>
             <select id="department" th:field="*{departmentId}" class="form-control">
-                <option value="">-- 부서를 선택해 주세요 --</option>
-                <th:block th:each="org : ${organizations}">
-                    <option th:if="${org.pId == 0}"
-                            th:value="${org.id}"
-                            th:text="${org.name}"
-                            th:disabled="true">
-                    </option>
-                    <option th:each="suborg : ${organizations}"
-                            th:if="${suborg.pId == org.id}"
-                            th:value="${suborg.id}"
-                            th:text="${#strings.repeat('|&emsp;', getHierarchyLevel(suborg)) + suborg.name}">
-                    </option>
-                </th:block>
+                <option value="" selected>부서를 선택해주세요</option>
+                <option th:each="orgIndent : ${organizations.entrySet()}" th:value="${orgIndent.key.id}"
+                        th:disabled="${#strings.endsWith(orgIndent.key.name, '본부')}"
+                        th:utext="${#strings.repeat('&nbsp;', orgIndent.value*2) + orgIndent.key.name}"></option>
             </select>
             <p th:if="${departmentId != null}" th:text="${departmentId}" class="field-error"></p>
         </div>
