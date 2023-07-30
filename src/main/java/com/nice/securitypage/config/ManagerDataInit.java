@@ -16,8 +16,8 @@ public class ManagerDataInit {
 //    @PostConstruct
     public void init(){
         Manager admin = Manager.builder()
-                .username("admin")
-                .password(encryptPassword("12345678"))
+                .username("min")
+                .password(encryptPassword("1234"))
                 .build();
         managerRepository.save(admin);
     }

@@ -31,30 +31,19 @@ public class ManagerController {
         if (bindingResult.hasErrors()) {
             return "form/loginForm";
         }
-        boolean success = managerService.login(managerDto);
+        boolean success = managerService.login(managerDto, session);
 
         // 로그인 실패 시
         if (!success) {
-            // 세션에 저장된 실패 횟수를 가져온다.
-            Integer failureCount = (Integer) session.getAttribute("failureCount");
-
-            // 만약 세션에 실패 횟수 정보가 없다면, 실패 횟수를 1로 설정한다.
-            if (failureCount == null) {
-                failureCount = 1;
+            String errorMessage;
+            if (managerService.isLocked(managerDto.getUsername())) {
+                errorMessage = "계정이 잠겼습니다.";
             } else {
-                // 세션에 실패 횟수 정보가 있다면, 실패 횟수를 1 증가시킨다.
-                failureCount++;
+                errorMessage = "아이디 혹은 비밀번호가 일치하지 않습니다.";
             }
-
-            // 증가시킨 실패 횟수를 다시 세션에 저장한다.
-            session.setAttribute("failureCount", failureCount);
-
-            model.addAttribute("errorMessage", "아이디 혹은 비밀번호가 일치하지 않습니다. 실패 횟수: " + failureCount);
+            model.addAttribute("errorMessage", errorMessage);
             return "form/loginForm";
         }
-
-        // 로그인 성공 시, 실패 횟수를 초기화한다.
-        session.setAttribute("failureCount", 0);
 
         return "redirect:/"; // 로그인 성공 후 리다이렉트할 페이지 URL 수정
     }

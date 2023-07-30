@@ -21,4 +21,8 @@ public class Manager {
 
     @Column(columnDefinition = "boolean default false")
     private boolean isLocked;
+
+    public void lock() {
+        this.isLocked = true;
+    }
 }

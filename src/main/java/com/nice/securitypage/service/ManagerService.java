@@ -4,6 +4,7 @@ import com.nice.securitypage.config.security.EncryptionUtil;
 import com.nice.securitypage.dto.ManagerDto;
 import com.nice.securitypage.entity.Manager;
 import com.nice.securitypage.repository.ManagerRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ public class ManagerService {
 
     private final ManagerRepository managerRepository;
 
-    public boolean login(ManagerDto managerDto) {
+    public boolean login(ManagerDto managerDto, HttpSession session) {
         String username = managerDto.getUsername();
         String providedPassword = managerDto.getPassword();
 
@@ -30,13 +31,41 @@ public class ManagerService {
 
         // Check the provided password against the one in the database
         if (!manager.getPassword().equals(sha256Password)) {
+            Integer failureCount = (Integer) session.getAttribute(username + "-failureCount");
+            if (failureCount == null) {
+                failureCount = 1;
+            } else {
+                failureCount++;
+            }
+
+            session.setAttribute(username + "-failureCount", failureCount);
+
+            // If the failure count is 5, lock the user
+            if (failureCount >= 5) {
+                lockUser(manager);
+            }
+
             return false;
         }
-        System.out.println("Username: " + username);
-        System.out.println("Password: " + providedPassword);
+
         // If everything is fine, return true
+        session.removeAttribute(username + "-failureCount");
         return true;
-        // Continue with the login process
+    }
+    private void lockUser(Manager manager) {
+        manager.lock();
+        managerRepository.save(manager);
+    }
+
+    public boolean isLocked(String username) {
+        Manager manager = managerRepository.findByUsername(username)
+                .orElse(null);
+
+        if (manager == null) {
+            return false;
+        }
+
+        return manager.isLocked();
     }
 
 }
