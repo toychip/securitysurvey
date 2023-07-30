@@ -1,9 +1,6 @@
 package com.nice.securitypage.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,4 +18,7 @@ public class Manager {
     private Long id;
     private String username;
     private String password;
+
+    @Column(columnDefinition = "boolean default false")
+    private boolean isLocked;
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 //@Component
 @RequiredArgsConstructor
-public class QuestionData {
+public class QuestionDataInit {
 
     private final QuestionRepository questionRepository;
 

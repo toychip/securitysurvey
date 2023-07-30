@@ -1,6 +1,6 @@
 package com.nice.securitypage.service;
 
-import com.nice.securitypage.config.DateConfig;
+import com.nice.securitypage.config.DateInit;
 import com.nice.securitypage.dto.FormDto;
 import com.nice.securitypage.entity.Form;
 import com.nice.securitypage.repository.FormRepository;
@@ -72,8 +72,8 @@ public class FormService {
     // 날짜 포멧터를 활용하여 DataConfig에서 시작 년월일, 만료 년월일 가져와 Model에 추가
     public void getPeriod(Model model) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
-        LocalDate fromDate = LocalDate.parse(DateConfig.FROM_DATE, formatter);
-        LocalDate toDate = LocalDate.parse(DateConfig.TO_DATE, formatter);
+        LocalDate fromDate = LocalDate.parse(DateInit.FROM_DATE, formatter);
+        LocalDate toDate = LocalDate.parse(DateInit.TO_DATE, formatter);
 
         model.addAttribute("fromYear", fromDate.getYear());
         model.addAttribute("fromMonth", fromDate.getMonthValue());
@@ -89,8 +89,8 @@ public class FormService {
 
         // 포멧터를 이용, DataConfig로 날짜 가져옴
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
-        LocalDate fromDate = LocalDate.parse(DateConfig.FROM_DATE, formatter);
-        LocalDate toDate = LocalDate.parse(DateConfig.TO_DATE, formatter);
+        LocalDate fromDate = LocalDate.parse(DateInit.FROM_DATE, formatter);
+        LocalDate toDate = LocalDate.parse(DateInit.TO_DATE, formatter);
 
         // 날짜가 하나라도 이상할 경우 기간이 아님을 뜻하는 outOfDate로 Return
         if (LocalDate.now().isBefore(fromDate) || LocalDate.now().isAfter(toDate)) {
