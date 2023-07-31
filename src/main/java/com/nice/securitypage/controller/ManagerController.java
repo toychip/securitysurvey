@@ -1,5 +1,6 @@
 package com.nice.securitypage.controller;
 
+import com.nice.securitypage.dto.AnswerResponse;
 import com.nice.securitypage.dto.ManagerDto;
 import com.nice.securitypage.entity.Answer;
 import com.nice.securitypage.service.ManagerService;
@@ -55,8 +56,8 @@ public class ManagerController {
     public String admin(Model model) {
 
 
-        List<Answer> answers = managerService.getAnswers();
-        model.addAttribute("answers", answers);
+        List<AnswerResponse> answersResponse = managerService.getAnswers();
+        model.addAttribute("answersResponse", answersResponse);
         return "adminPage";
     }
 }

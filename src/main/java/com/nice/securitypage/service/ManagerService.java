@@ -1,6 +1,8 @@
 package com.nice.securitypage.service;
 
+import com.nice.securitypage.config.AESUtilConfig;
 import com.nice.securitypage.config.security.EncryptionUtil;
+import com.nice.securitypage.dto.AnswerResponse;
 import com.nice.securitypage.dto.ManagerDto;
 import com.nice.securitypage.entity.Answer;
 import com.nice.securitypage.entity.Manager;
@@ -14,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,6 +25,7 @@ public class ManagerService implements UserDetailsService {
 
     private final ManagerRepository managerRepository;
     private final AnswerRepository answerRepository;
+    private final AESUtilConfig aesUtilConfig;
 
 //    public boolean login(ManagerDto managerDto, HttpSession session) {
 //        String username = managerDto.getUsername();
@@ -77,9 +81,31 @@ public class ManagerService implements UserDetailsService {
 //        return manager.isLocked();
 //    }
 
-    public List<Answer> getAnswers() {
-        return answerRepository.findAll();
+    public List<AnswerResponse> getAnswers() {
+        List<Answer> answers = answerRepository.findAll();
+        List<AnswerResponse> answerResponses = new ArrayList<>();
+
+        for (Answer answer : answers) {
+            AnswerResponse.AnswerResponseBuilder answerResponseBuilder = AnswerResponse.builder()
+                    .id(answer.getId())
+                    .content(answer.getContent())
+                    .isRequired(answer.getIsRequired())
+                    .emailName(answer.getEmailname())
+                    .response(answer.getResponse());
+
+            String url = "https://nicednr-project.s3.ap-northeast-2.amazonaws.com/nice-imformation-security/";
+            if (answer.getResponse().startsWith(url)) {
+                String encryptedPart = answer.getResponse().replace(url, "");
+                String decryptedPart = aesUtilConfig.decrypt(encryptedPart);
+                answerResponseBuilder.decryptedResponse(decryptedPart);
+            }
+
+            answerResponses.add(answerResponseBuilder.build());
+        }
+
+        return answerResponses;
     }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

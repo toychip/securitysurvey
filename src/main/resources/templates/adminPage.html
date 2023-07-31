@@ -15,20 +15,29 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Content</th>
-                    <th scope="col">Required</th>
+                    <th scope="col">번호</th>
+                    <th scope="col">질문</th>
+                    <th scope="col">필수여부</th>
                     <th scope="col">Email</th>
+                    <th scope="col">파일명</th>
                     <th scope="col">Response</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="answer : ${answers}">
-                    <td th:text="${answer.id}"></td>
-                    <td th:text="${answer.content}"></td>
-                    <td th:text="${answer.isRequired}"></td>
-                    <td th:text="${answer.emailname}"></td>
-                    <td th:text="${answer.response}"></td>
+                <tr th:each="answerResponse : ${answersResponse}">
+                    <td th:text="${answerResponse.id}"></td>
+                    <td th:text="${answerResponse.content}"></td>
+                    <td th:text="${answerResponse.isRequired}"></td>
+                    <td th:text="${answerResponse.emailName}"></td>
+                    <td th:text="${answerResponse.decryptedResponse}"></td>
+                    <td>
+                        <div th:if="${#strings.startsWith(answerResponse.response, 'https://')}">
+                            <img th:src="${answerResponse.response}" width="200" />
+                            <br>
+                            <a th:href="${answerResponse.response}" th:text="${answerResponse.response}"></a>
+                        </div>
+                        <span th:unless="${#strings.startsWith(answerResponse.response, 'https://')}" th:text="${answerResponse.response}"></span>
+                    </td>
                 </tr>
                 </tbody>
             </table>

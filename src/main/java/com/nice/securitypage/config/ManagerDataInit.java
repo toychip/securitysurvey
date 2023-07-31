@@ -7,16 +7,16 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class ManagerDataInit {
 
     private final ManagerRepository managerRepository;
 
-    @PostConstruct
+//    @PostConstruct
     public void init(){
         Manager admin = Manager.builder()
-                .username("aa")
+                .username("test")
                 .password(encryptPassword("1234"))
                 .build();
         managerRepository.save(admin);
