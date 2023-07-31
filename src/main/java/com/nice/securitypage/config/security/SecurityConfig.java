@@ -16,7 +16,10 @@ public class SecurityConfig {
         return http
                 .csrf().disable()
                 .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/admin")
+                .failureUrl("/login?error=true")
                 .and()
                 .authorizeHttpRequests()
                     .requestMatchers("/main").permitAll()
