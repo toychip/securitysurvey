@@ -13,7 +13,8 @@
       <h3 class="text-center">나이스 관리자 페이지</h3>
 
       <!-- Error Message -->
-      <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+      <div th:if="${session.errorMessage}" class="alert alert-danger" role="alert" th:text="${session.errorMessage}"></div>
+
 
       <form th:action="@{/login}" th:object="${managerDto}" method="post">
         <div class="form-group">
@@ -36,11 +37,9 @@
 
 <script th:inline="javascript">
   /*<![CDATA[*/
-  var errorMessage = [[${errorMessage}]];
+  var errorMessage = [[${session.errorMessage}]];
   if (errorMessage) {
     alert(errorMessage);
   }
   /*]]>*/
 </script>
-</body>
-</html>
