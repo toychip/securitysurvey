@@ -27,7 +27,10 @@
                 <tr th:each="answerResponse : ${answersResponse}">
                     <td th:text="${answerResponse.id}"></td>
                     <td th:text="${answerResponse.content}"></td>
-                    <td th:text="${answerResponse.isRequired}"></td>
+                    <td>
+                        <span th:if="${answerResponse.isRequired}" th:text="'필수'"></span>
+                        <span th:unless="${answerResponse.isRequired}" th:text="'선택'"></span>
+                    </td>
                     <td th:text="${answerResponse.emailName}"></td>
                     <td th:text="${answerResponse.decryptedResponse}"></td>
                     <td>

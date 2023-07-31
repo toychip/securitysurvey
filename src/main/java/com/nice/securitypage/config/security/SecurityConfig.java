@@ -21,11 +21,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf().disable()
-                .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/admin")
-                .failureHandler(failureHandler)
+                    .formLogin()
+                    .loginPage("/login")
+                    .loginProcessingUrl("/login")
+                    .defaultSuccessUrl("/admin")
+                    .failureHandler(failureHandler)
                 .and()
                 .authorizeHttpRequests()
                     .requestMatchers("/main").permitAll()
@@ -34,11 +34,15 @@ public class SecurityConfig {
                     .requestMatchers("/alreadyFin").permitAll()
                     .requestMatchers("/endPage").permitAll()
                     .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
-
                 .anyRequest().authenticated()
-                    .and()
+                .and()
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                    .invalidSessionUrl("/login")    // 세션이 유효하지 않을 때 리다이렉트 될 URL
+                    .maximumSessions(1)  // 동시 세션 제한 수
+                    .expiredUrl("/login")  // 세션이 만료될 때 리다이렉트 될 URL
+                .and()
+                    .sessionFixation().newSession()  // 로그인 할 때마다 새로운 세션을 생성
                 .and()
                 .authenticationProvider(provider)
                 .build();
