@@ -46,8 +46,11 @@ public class QuestionController {
     ) {
         // 세션을 통해 사용자 이메일 정보를 가져옴
         String emailname = (String) session.getAttribute("emailname");
-        answerService.submitForm(answerDtoWrapper.getAnswerMap(), emailname);
 
+        // 설문조사 결과 db에 emailname이 없는 경우에만 저장, 뒤로가기 했다가 다시 제출시 2번 저장 방지
+        if(!answerService.alreadyExistsValidate(emailname + "@nicednr.co.kr")) {
+            answerService.submitForm(answerDtoWrapper.getAnswerMap(), emailname);
+        }
         return "redirect:/endPage";
     }
 
