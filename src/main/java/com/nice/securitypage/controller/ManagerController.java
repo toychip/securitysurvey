@@ -1,6 +1,7 @@
 package com.nice.securitypage.controller;
 
 import com.nice.securitypage.dto.ManagerDto;
+import com.nice.securitypage.entity.Answer;
 import com.nice.securitypage.service.ManagerService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -45,6 +48,15 @@ public class ManagerController {
             return "form/loginForm";
         }
 
-        return "redirect:/"; // 로그인 성공 후 리다이렉트할 페이지 URL 수정
+        return "redirect:/admin"; // 로그인 성공 후 리다이렉트할 페이지 URL 수정
+    }
+
+    @GetMapping("/admin")
+    public String admin(Model model) {
+
+
+        List<Answer> answers = managerService.getAnswers();
+        model.addAttribute("answers", answers);
+        return "adminPage";
     }
 }

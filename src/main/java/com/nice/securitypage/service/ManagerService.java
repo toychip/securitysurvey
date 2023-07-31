@@ -2,17 +2,22 @@ package com.nice.securitypage.service;
 
 import com.nice.securitypage.config.security.EncryptionUtil;
 import com.nice.securitypage.dto.ManagerDto;
+import com.nice.securitypage.entity.Answer;
 import com.nice.securitypage.entity.Manager;
+import com.nice.securitypage.repository.AnswerRepository;
 import com.nice.securitypage.repository.ManagerRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ManagerService {
 
     private final ManagerRepository managerRepository;
+    private final AnswerRepository answerRepository;
 
     public boolean login(ManagerDto managerDto, HttpSession session) {
         String username = managerDto.getUsername();
@@ -66,6 +71,10 @@ public class ManagerService {
         }
 
         return manager.isLocked();
+    }
+
+    public List<Answer> getAnswers() {
+        return answerRepository.findAll();
     }
 
 }

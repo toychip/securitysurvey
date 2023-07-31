@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>NICE D&R - Admin Page</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h2 class="text-center">NICE D&R</h2>
+            <h3 class="text-center">나이스 관리자 페이지</h3>
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Content</th>
+                    <th scope="col">Required</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Response</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="answer : ${answers}">
+                    <td th:text="${answer.id}"></td>
+                    <td th:text="${answer.content}"></td>
+                    <td th:text="${answer.isRequired}"></td>
+                    <td th:text="${answer.emailname}"></td>
+                    <td th:text="${answer.response}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Include jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+</html>
