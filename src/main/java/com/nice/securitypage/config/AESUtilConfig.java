@@ -43,7 +43,7 @@ public class AESUtilConfig {
             // 복호화 모드로 초기화
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
             // 암호화된 문자열을 복호화하여 바이트 배열로 변환하고, 이를 다시 문자열로 변환
-            return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
+            return new String(cipher.doFinal(Base64.getUrlDecoder().decode(strToDecrypt)));
         } catch (Exception e) {
             System.out.println("Error while decrypting: " + e.toString());
         }
