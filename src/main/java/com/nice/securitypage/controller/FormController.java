@@ -1,7 +1,6 @@
 package com.nice.securitypage.controller;
 
 import com.nice.securitypage.dto.FormDto;
-import com.nice.securitypage.entity.Organization;
 import com.nice.securitypage.service.AnswerService;
 import com.nice.securitypage.service.FormService;
 import com.nice.securitypage.service.OrganizationService;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

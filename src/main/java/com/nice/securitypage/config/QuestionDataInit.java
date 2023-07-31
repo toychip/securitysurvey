@@ -10,6 +10,7 @@ import java.util.List;
 
 //@Component
 @RequiredArgsConstructor
+// 스프링 컨테이너 실행시 데이터 등록
 public class QuestionDataInit {
 
     private final QuestionRepository questionRepository;

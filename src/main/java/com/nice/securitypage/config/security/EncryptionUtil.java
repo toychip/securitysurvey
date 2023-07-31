@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class EncryptionUtil {
 
+    // SHA-256 알고리즘을 이용하여 입력된 문자열을 암호화하는 메서드
     public static String encryptSHA256(String md5) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -22,10 +23,12 @@ public class EncryptionUtil {
             }
             return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
+            // SHA-256 알고리즘이 없는 경우 예외를 발생시킴
             throw new RuntimeException(e);
         }
     }
 
+    // MD5 알고리즘을 이용하여 입력된 문자열을 암호화하는 메서드
     public static String encryptMD5(String password) {
         return DigestUtils.md5DigestAsHex(password.getBytes());
     }

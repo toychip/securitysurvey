@@ -11,10 +11,12 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+// 실패한 인증 시도를 처리하는 클래스
 @Component
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
     @Override
+    // 사용자가 인증에 실패했을 때 호출되는 메서드
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         String errorMessage;
         if (exception instanceof LockedException) {
@@ -25,7 +27,9 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
             errorMessage = "로그인 실패";
         }
 
+        // 세션에 오류 메시지를 설정하여 사용자에게 표시 가능하게 함
         request.getSession().setAttribute("errorMessage", errorMessage);
+        // 사용자를 로그인 페이지로 다시 리다이렉트
         response.sendRedirect("/login");
     }
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+// 관리자 페이지에 내려줄 Response
 public class AnswerResponse {
     private Long id;
     private String content;

@@ -21,18 +21,22 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf().disable()
+                // 로그인 페이지 및 성공 URL, 실패 핸들러 설정
                     .formLogin()
                     .loginPage("/login")
                     .loginProcessingUrl("/login")
                     .defaultSuccessUrl("/admin")
                     .failureHandler(failureHandler)
                 .and()
+                // 요청에 대한 권한 설정
                 .authorizeHttpRequests()
                     .requestMatchers("/main").permitAll()
                     .requestMatchers("/question").permitAll()
                     .requestMatchers("/login").permitAll()
                     .requestMatchers("/alreadyFin").permitAll()
                     .requestMatchers("/endPage").permitAll()
+                    .requestMatchers("/index.html").permitAll()
+                    .requestMatchers("/").permitAll()
                     .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -46,13 +50,6 @@ public class SecurityConfig {
                 .and()
                 .authenticationProvider(provider)
                 .build();
-
     }
-
-//    @Bean
-//    public AuthenticationFailureHandler customAuthenticationFailureHandler() {
-//        return new CustomAuthenticationFailureHandler();
-//    }
-
 
 }

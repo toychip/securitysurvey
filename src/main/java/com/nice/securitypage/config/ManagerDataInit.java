@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 //@Component
 @RequiredArgsConstructor
+// 스프링 컨테이너 실행시 데이터 등록
 public class ManagerDataInit {
 
     private final ManagerRepository managerRepository;
@@ -21,6 +22,8 @@ public class ManagerDataInit {
                 .build();
         managerRepository.save(admin);
     }
+
+    // 비밀번호 암호화
     private String encryptPassword(String password) {
         String md5Password = EncryptionUtil.encryptMD5(password);
         return EncryptionUtil.encryptSHA256(md5Password);
