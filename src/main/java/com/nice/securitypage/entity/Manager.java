@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Getter
-//@Setter
 public class Manager {
 
     @Id
