@@ -1,12 +1,21 @@
 package com.nice.securitypage.controller;
 
 import com.nice.securitypage.dto.AnswerResponse;
+import com.nice.securitypage.dto.ChangePasswordDto;
 import com.nice.securitypage.dto.ManagerDto;
 import com.nice.securitypage.service.ManagerService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -32,6 +41,40 @@ public class ManagerController {
 
         model.addAttribute("answersResponse", answersResponse);
         return "adminPage";
+    }
+
+    // 비밀번호 변경 로직
+
+    @GetMapping("/change-password")
+    public String getChangePasswordPage(Model model) {
+        // 모델에 ChangePasswordDto 객체를 추가하여 타임리프에서 이 객체를 활용하여 폼 데이터를 바인딩
+        model.addAttribute("changePasswordDto", new ChangePasswordDto());
+        return "change-password";
+    }
+
+    @PostMapping("/change-password")
+    public String changePassword(HttpServletRequest request, @Valid @ModelAttribute ChangePasswordDto form, BindingResult result) {
+        System.out.println("form.getNewPassword() = " + form.getNewPassword());
+
+//        // 인증 객체가 null이면 로그인 페이지로 리디렉션합니다.
+//        if (authentication == null) {
+//            return "redirect:/login";
+//        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("authentication = " + authentication);
+
+        if (result.hasErrors()) {
+            return "change-password";
+        }
+
+        // ManagerService의 changePassword 메서드를 호출하여 비밀번호를 변경
+        managerService.changePassword(authentication.getName(), form.getNewPassword());
+
+        // 세션 종료 및 로그아웃
+        request.getSession().invalidate();
+        SecurityContextHolder.clearContext();
+
+        return "redirect:/login";
     }
 
     // 스프링 시큐리티를 사용하기 전 세션 로그인 방식

@@ -4,16 +4,16 @@ import com.nice.securitypage.entity.Manager;
 import com.nice.securitypage.repository.ManagerRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.LockedException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,7 +26,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private final HttpSession session;
 
     @Override
-    // 입력된 아이디와 비밀번호를 검증하고 인증된 사용자를 반환
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String providedPassword = (String) authentication.getCredentials();
@@ -49,9 +48,20 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if (manager.isLocked()) {
             throw new LockedException("계정이 잠겼습니다.");
         }
+
+        // HttpServletRequest 객체를 통해 세션을 얻음
         // 사용자의 권한을 설정하고 인증된 사용자를 반환
         List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-        return new UsernamePasswordAuthenticationToken(username, providedPassword, authorities);
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, providedPassword, authorities);
+
+        if (sha256Password.equals("11111111") || manager.getCreatedDate().plusDays(90).isBefore(LocalDateTime.now())) {
+            auth.setDetails(new CustomUserDetails(true));
+        } else {
+            auth.setDetails(new CustomUserDetails(false));
+        }
+
+        return auth;
+
     }
 
     @Override

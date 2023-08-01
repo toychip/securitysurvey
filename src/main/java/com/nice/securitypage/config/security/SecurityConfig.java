@@ -16,6 +16,7 @@ public class SecurityConfig {
 
     private final CustomAuthenticationProvider provider;
     private final CustomAuthenticationFailureHandler failureHandler;
+    private final CustomAuthenticationSuccessHandler successHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -27,6 +28,7 @@ public class SecurityConfig {
                     .loginProcessingUrl("/login")
                     .defaultSuccessUrl("/admin")
                     .failureHandler(failureHandler)
+                    .successHandler(successHandler)
                 .and()
                 // 요청에 대한 권한 설정
                 .authorizeHttpRequests()
@@ -37,6 +39,7 @@ public class SecurityConfig {
                     .requestMatchers("/endPage").permitAll()
                     .requestMatchers("/index.html").permitAll()
                     .requestMatchers("/").permitAll()
+                    .requestMatchers("/change-password").authenticated()
                     .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
                 .anyRequest().authenticated()
                 .and()

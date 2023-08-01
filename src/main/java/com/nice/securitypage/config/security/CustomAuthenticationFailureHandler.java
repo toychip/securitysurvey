@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -23,6 +24,9 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
             errorMessage = "5번 잘못 입력했기 때문에 계정이 잠겼습니다.";
         } else if (exception instanceof BadCredentialsException) {
             errorMessage = "아이디 혹은 비밀번호가 일치하지 않습니다.";
+        } else if (exception instanceof CredentialsExpiredException) {
+            response.sendRedirect("/change-password");
+            return;
         } else {
             errorMessage = "로그인 실패";
         }

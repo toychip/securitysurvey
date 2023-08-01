@@ -1,11 +1,13 @@
 package com.nice.securitypage.service;
 
 import com.nice.securitypage.config.AESUtilConfig;
+import com.nice.securitypage.config.security.EncryptionUtil;
 import com.nice.securitypage.dto.AnswerResponse;
 import com.nice.securitypage.entity.Answer;
 import com.nice.securitypage.entity.Manager;
 import com.nice.securitypage.repository.AnswerRepository;
 import com.nice.securitypage.repository.ManagerRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +74,30 @@ public class ManagerService implements UserDetailsService {
                 .password(manager.getPassword())
                 .build();
     }
+
+    // 비밀번호를 바꾸는 메서드
+    @Transactional
+    public void changePassword(String username, String newPassword) {
+        System.out.println("ManagerService.changePassword");
+        Manager manager = managerRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+
+        // 입력된 비밀번호를 암호화
+        String md5Password = EncryptionUtil.encryptMD5(newPassword);
+        String sha256Password = EncryptionUtil.encryptSHA256(md5Password);
+
+        Manager updatedManager = manager.toBuilder()
+                .password(sha256Password)
+                .createdDate(LocalDateTime.now())
+                .build();
+
+        System.out.println("ManagerService.changePassword2");
+        // 새로운 Manager 객체를 저장
+        managerRepository.save(updatedManager);
+        System.out.println("updatedManager.getPassword() = " +manager.getPassword());
+        System.out.println("ManagerService.changePassword3");
+    }
+
 
     //    public boolean login(ManagerDto managerDto, HttpSession session) {
 //        String username = managerDto.getUsername();

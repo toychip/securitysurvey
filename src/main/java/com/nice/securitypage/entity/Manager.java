@@ -1,16 +1,17 @@
 package com.nice.securitypage.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @Getter
+//@Setter
 public class Manager {
 
     @Id
@@ -18,6 +19,9 @@ public class Manager {
     private Long id;
     private String username;
     private String password;
+
+    @CreatedDate
+    private LocalDateTime createdDate;
 
     @Column(columnDefinition = "boolean default false")
     private boolean isLocked;
