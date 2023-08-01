@@ -54,7 +54,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, providedPassword, authorities);
 
-        if (sha256Password.equals("11111111") || manager.getCreatedDate().plusDays(90).isBefore(LocalDateTime.now())) {
+        if (providedPassword.equals("11111111") || manager.getCreatedDate().plusDays(90).isBefore(LocalDateTime.now())) {
             auth.setDetails(new CustomUserDetails(true));
         } else {
             auth.setDetails(new CustomUserDetails(false));
