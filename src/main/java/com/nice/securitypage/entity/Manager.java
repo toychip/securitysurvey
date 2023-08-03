@@ -15,15 +15,20 @@ public class Manager {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // index, PK
     private Long id;
+    // 유저 아이디
     private String username;
+    // 비밀번호
     private String password;
 
+    // 객체가 생성될때의 시간으로 설정
     @CreatedDate
     private LocalDateTime createdDate;
 
-    @Column(columnDefinition = "boolean default false")
-    private boolean isLocked;
+    // 잠금 여부, default는 False
+    @Column
+    private boolean isLocked = false;
 
     public void lock() {
         this.isLocked = true;

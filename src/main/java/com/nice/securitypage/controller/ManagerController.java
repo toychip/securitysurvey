@@ -28,6 +28,7 @@ public class ManagerController {
     @GetMapping("/login")
     public String loginForm(Model model) {
 
+        // 아이디와 비밀번호를 입력할 수 있는 빈껍데기를 담아서 모델에 담음
         model.addAttribute("managerDto", new ManagerDto());
         return "form/loginForm";
     }
@@ -36,9 +37,9 @@ public class ManagerController {
     @GetMapping("/admin")
     public String admin(Model model) {
 
-
         List<AnswerResponse> answersResponse = managerService.getAnswers();
 
+        // 모델에 응답에 대한 모든 데이터들을 담음
         model.addAttribute("answersResponse", answersResponse);
         return "adminPage";
     }

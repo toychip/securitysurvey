@@ -21,6 +21,7 @@ public class S3Config {
     @Value("${cloud.aws.region.static}")
     private String region;
 
+    // aws인증 정보 생성
     @Bean
     public AmazonS3 amazonS3Client() {
         AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);

@@ -10,6 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 @Setter
 public class AnswerDto {
-    private String response;  // 사용자의 답변 (예: true, 아니오: false 혹은 String)
+    private String response;  // 사용자의 답변 예, 아니오, Input값
     private MultipartFile file;  // 사용자가 업로드한 파일
 }

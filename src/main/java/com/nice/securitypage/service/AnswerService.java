@@ -28,8 +28,8 @@ public class AnswerService {
         for(Question question : questions) {
             // 질문의 ID를 사용하여 map에서 사용자 응답을 가져옴
             AnswerDto answerDto = answerMap.get(String.valueOf(question.getId()));  // 수정된 부분
-            String response = (answerDto != null) ? answerDto.getResponse() : null;
-            MultipartFile multipartFile = (answerDto != null) ? answerDto.getFile() : null;
+            String response = (answerDto != null) ? answerDto.getResponse() : null; // answerDto가 null이면 null값을 넣음
+            MultipartFile multipartFile = (answerDto != null) ? answerDto.getFile() : null; // answerDto의 파일을 꺼내서 null이면 null값을 넣음
 
             // response가 파일일 경우에
             if (multipartFile != null && !multipartFile.isEmpty()) {
@@ -41,8 +41,6 @@ public class AnswerService {
             }
 
             // Answer 객체 생성
-            System.out.println("question = " + question);
-            System.out.println("response = " + response);
             Answer answer = Answer.builder()
                     .content(question.getContent())
                     .isRequired(question.getIsRequired())

@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.nice'
-version = '0.0.2-nice-SecurityApplication'
+version = '0.0.3-nice-SecurityApplication'
 
 java {
 	sourceCompatibility = '17'

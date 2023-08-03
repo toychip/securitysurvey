@@ -35,7 +35,7 @@ public class ManagerService implements UserDetailsService {
 
         // 각 답변에 대해
         for (Answer answer : answers) {
-            long num = answer.getId() % 6 == 0 ? 6 : answer.getId() % 6; // 1~6으로 나타내기
+            long num = answer.getId() % 6 == 0 ? 6 : answer.getId() % 6; // 질문 번호 1~6으로 나타내기
             // AnswerResponse를 빌드하기 위한 빌더를 초기화
             AnswerResponse.AnswerResponseBuilder answerResponseBuilder = AnswerResponse.builder()
                     .id(num)
@@ -49,8 +49,11 @@ public class ManagerService implements UserDetailsService {
 
             // 답변이 URL로 시작하면, 이를 복호화
             if (answer.getResponse() != null && answer.getResponse().startsWith(url)) {
+                // url절사
                 String encryptedPart = answer.getResponse().replace(url, "");
+                // 암호화된 이름 복호화
                 String decryptedPart = aesUtilConfig.decrypt(encryptedPart);
+                // 복호화한 이름으로 응답에 담음
                 answerResponseBuilder.decryptedResponse(decryptedPart);
             } else {
                 answerResponseBuilder.decryptedResponse(null);
@@ -90,62 +93,9 @@ public class ManagerService implements UserDetailsService {
                 .password(sha256Password)
                 .createdDate(LocalDateTime.now())
                 .build();
-
-        System.out.println("ManagerService.changePassword2");
         // 새로운 Manager 객체를 저장
+
+        // dirty checking이 일어나므로 이전 객체를 삭제할 필요가 없음
         managerRepository.save(updatedManager);
-        System.out.println("updatedManager.getPassword() = " +manager.getPassword());
-        System.out.println("ManagerService.changePassword3");
     }
-
-
-    //    public boolean login(ManagerDto managerDto, HttpSession session) {
-//        String username = managerDto.getUsername();
-//        String providedPassword = managerDto.getPassword();
-//
-//        // 비밀번호 암호화
-//        String md5Password = EncryptionUtil.encryptMD5(providedPassword);
-//        String sha256Password = EncryptionUtil.encryptSHA256(md5Password);
-//
-//        Manager manager = managerRepository.findByUsername(username)
-//                .orElse(null);
-//
-//        if (manager == null) {
-//            return false;
-//        }
-//
-//        // 비밀번호 맞는지 확인
-//        if (!manager.getPassword().equals(sha256Password)) {
-//            Integer failureCount = (Integer) session.getAttribute(username + "-failureCount");
-//            if (failureCount == null) {
-//                failureCount = 1;
-//            } else {
-//                failureCount++;
-//            }
-//
-//            session.setAttribute(username + "-failureCount", failureCount);
-//
-//            // If the failure count is 5, lock the user
-//            if (failureCount >= 5) {
-//                lockUser(manager);
-//            }
-//
-//            return false;
-//        }
-//
-//        // 비밀번호가 맞다면
-//        session.removeAttribute(username + "-failureCount");
-//        return true;
-//    }
-//        계정을 잠그는 메서드
-    //    public boolean isLocked(String username) {
-//        Manager manager = managerRepository.findByUsername(username)
-//                .orElse(null);
-//
-//        if (manager == null) {
-//            return false;
-//        }
-//
-//        return manager.isLocked();
-//    }
 }

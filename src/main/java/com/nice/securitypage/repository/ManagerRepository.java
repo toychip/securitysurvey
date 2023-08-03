@@ -7,4 +7,8 @@ import java.util.Optional;
 
 public interface ManagerRepository extends JpaRepository<Manager, Long> {
     Optional<Manager> findByUsername(String username);
+    /*
+    Mysql
+    SELECT * FROM manager WHERE username = ?
+     */
 }

@@ -3,7 +3,9 @@ package com.nice.securitypage.config;
 import com.nice.securitypage.entity.Question;
 import com.nice.securitypage.entity.ResponseType;
 import com.nice.securitypage.repository.QuestionRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +18,7 @@ public class QuestionDataInit {
     private final QuestionRepository questionRepository;
 
 //    @PostConstruct
+//    QuestionDataInit가 등록됐을 때 실행, 초기화 후 데이터 삽입 메서드
     public void init(){
         Question question1 = Question.builder()
                 .content("PC-Filter프로그램 전체실행을 수행한 후 검출된 파일을 제거 또는 암호화 하였습니까?\n" +
